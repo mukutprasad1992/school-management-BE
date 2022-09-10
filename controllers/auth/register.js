@@ -1,7 +1,11 @@
 var bcrypt = require("bcrypt");
 var User = require("../../model/userData");
 
-const createUser = (req, res) => {
+exports.getUser = (req, res, next) => {
+  res.status(200).json("respond with a resource!");
+};
+
+exports.createUser = (req, res, next) => {
   bcrypt.hash(req.body.password, 10, (err, hash) => {
     if (err) {
       return res.status(500).json({
