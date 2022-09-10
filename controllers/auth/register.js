@@ -1,20 +1,7 @@
-require("../constant/common");
-var express = require("express");
-var router = express.Router();
-var User = require("../model/userData");
 var bcrypt = require("bcrypt");
+var User = require("../../model/userData");
 
-/* GET users listing. */
-router.get("/", function (req, res, next) {
-  res.status(200).json("respond with a resource!");
-});
-
-/**
- * @author Aman
- * @description TO DO
- * @date --
- */
-router.post("/", (req, res, next) => {
+const createUser = (req, res) => {
   bcrypt.hash(req.body.password, 10, (err, hash) => {
     if (err) {
       return res.status(500).json({
@@ -28,7 +15,7 @@ router.post("/", (req, res, next) => {
         mobileNumber: req.body.mobileNumber,
         password: hash,
       });
-      user
+      return user
         .save()
         .then((result) => {
           res.status(200).json({
@@ -42,6 +29,4 @@ router.post("/", (req, res, next) => {
         });
     }
   });
-});
-
-module.exports = router;
+};
