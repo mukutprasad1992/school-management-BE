@@ -1,15 +1,19 @@
 var bcrypt = require("bcrypt");
+const { validationResult } = require("express-validator");
 var User = require("../../model/userData");
 
-exports.getUser = (req, res, next) => {
-  res.status(200).json("respond with a resource!");
-};
-
 exports.createUser = (req, res, next) => {
+  // Validate request {params | query | body}
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ status: false, result: errors.array() });
+  }
+  // End validation
   bcrypt.hash(req.body.password, 10, (err, hash) => {
-    if (err) {
+    if (error) {
       return res.status(500).json({
-        Something_went_worng: err,
+        status: false,
+        result: error,
       });
     } else {
       var user = new User({
@@ -21,14 +25,16 @@ exports.createUser = (req, res, next) => {
       });
       return user
         .save()
-        .then((result) => {
+        .then((createUser) => {
           res.status(200).json({
-            new_user: result,
+            status: true,
+            result: createUser,
           });
         })
-        .catch((err) => {
+        .catch((error) => {
           res.status(500).json({
-            error: err,
+            status: false,
+            result: error,
           });
         });
     }
