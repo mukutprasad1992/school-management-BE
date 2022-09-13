@@ -7,21 +7,35 @@ var userController = require("../controllers/user");
 
 /**
  * @author Aman
- * @description TO DO
+ * @description Updating data by id
+ * @date 09-09-2022
+ */
+router.put("/:userId", userController.updatedData);
+
+/**
+ * @author Aman
+ * @description Deleting data by id
+ * @date 09-09-2022
+ */
+router.delete("/:userId", userController.deleteUserById);
+
+/**
+ * @author Aman
+ * @description Getting data by id
  * @date 09-09-2022
  */
 router.get("/:userId", userController.getUserById);
 
 /**
  * @author Aman
- * @description TO DO
+ * @description Getting all registerd users data
  * @date 09-09-2022
  */
 router.get("/", userController.getUsers);
 
 /**
  * @author Aman
- * @description TO DO
+ * @description Creating users & validation
  * @date 10-09-2022
  */
 router.post(
