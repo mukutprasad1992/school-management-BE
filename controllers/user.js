@@ -1,13 +1,17 @@
 const { hash } = require("bcrypt");
-const res = require("express/lib/response");
 const User = require("../model/userData");
+const multer = require("multer");
+const upload = multer({ dest: "/utills" });
+
+
 
 exports.getUsers = (req, res, next) => {
   User.find()
-    .then((getUser) => {
+    .then((users) => {
+      console.info("users", users);
       res.status(200).json({
         status: true,
-        result: getUser,
+        result: users,
       });
     })
     .catch((error) => {
@@ -20,6 +24,7 @@ exports.getUsers = (req, res, next) => {
 
 exports.getUserById = (req, res, next) => {
   User.findById(req.params.userId)
+    .populate("roleId")
     .then((getUser) => {
       res.status(200).json({
         status: true,
@@ -35,7 +40,7 @@ exports.getUserById = (req, res, next) => {
 };
 
 exports.deleteUserById = (req, res, next) => {
-  User.remove({ __id: req.params.userId })
+  User.deleteOne({ __id: req.params.userId })
     .then((UserDeleted) => {
       res.status(200).json({
         status: true,
@@ -76,3 +81,11 @@ exports.updatedData = (req, res, next) => {
       });
     });
 };
+
+exports.profilePicUpload = upload.single("file"),
+  (req, res, next) => {
+    res.json({ status: true });
+  };
+
+
+

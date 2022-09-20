@@ -3,7 +3,15 @@ const { body } = require("express-validator");
 var express = require("express");
 var router = express.Router();
 var registerController = require("../controllers/auth/register");
+var loginController = require("../controllers/auth/login");
 var userController = require("../controllers/user");
+
+/**
+ * @author Aman
+ * @description login
+ * @date 13-09-2022
+ */
+router.post("/login", loginController.loginUser);
 
 /**
  * @author Aman
@@ -56,7 +64,15 @@ router.post(
   body("password")
     .isLength({ min: 1 })
     .withMessage("Password must not be empty"),
+  body("roleId").isLength({ min: 1 }).withMessage("Role id must not be empty"),
   registerController.createUser
 );
+
+/**
+ * @author Aman
+ * @description Uploading profile pic & add validation
+ * @date 10-09-2022
+ */
+router.post("/profile-pic-upload", userController.profilePicUpload);
 
 module.exports = router;
