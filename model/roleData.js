@@ -1,4 +1,3 @@
-const { ObjectId } = require("mongodb");
 var mongoose = require("mongoose");
 
 roleSchema = mongoose.Schema(

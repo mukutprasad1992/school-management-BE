@@ -5,6 +5,7 @@ var router = express.Router();
 var registerController = require("../controllers/auth/register");
 var loginController = require("../controllers/auth/login");
 var userController = require("../controllers/user");
+var multerFileUpload = require("../utils/multer");
 
 /**
  * @author Aman
@@ -73,6 +74,10 @@ router.post(
  * @description Uploading profile pic & add validation
  * @date 10-09-2022
  */
-router.post("/profile-pic-upload", userController.profilePicUpload);
+router.post(
+  "/profile-pic-upload",
+  multerFileUpload.upload.single("profilePic"),
+  userController.profilePicUpload
+);
 
 module.exports = router;

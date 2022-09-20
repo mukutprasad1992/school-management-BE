@@ -1,9 +1,5 @@
 const { hash } = require("bcrypt");
 const User = require("../model/userData");
-const multer = require("multer");
-const upload = multer({ dest: "/utills" });
-
-
 
 exports.getUsers = (req, res, next) => {
   User.find()
@@ -82,10 +78,6 @@ exports.updatedData = (req, res, next) => {
     });
 };
 
-exports.profilePicUpload = upload.single("file"),
-  (req, res, next) => {
-    res.json({ status: true });
-  };
-
-
-
+exports.profilePicUpload = (req, res, next) => {
+  res.json({ status: true, data: req.file });
+};

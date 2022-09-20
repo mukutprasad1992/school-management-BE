@@ -1,6 +1,4 @@
-const { ObjectId } = require("mongodb");
 var mongoose = require("mongoose");
-const { ENUM } = require("mysql/lib/protocol/constants/types");
 
 userSchema = mongoose.Schema(
   {
