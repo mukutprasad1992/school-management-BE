@@ -51,7 +51,7 @@ exports.deleteUserById = (req, res, next) => {
     });
 };
 
-exports.updatedData = (req, res, next) => {
+exports.updatedUser = (req, res, next) => {
   User.findOneAndUpdate(
     ({ __id: req.params.userId },
     {
@@ -79,5 +79,31 @@ exports.updatedData = (req, res, next) => {
 };
 
 exports.profilePicUpload = (req, res, next) => {
-  res.json({ status: true, data: req.file });
+  User.findOneAndUpdate(
+    ({ __id: req.params.userId },
+    {
+      $set: {
+        profilePic: req.file.key,
+      },
+    })
+  )
+    .then((profilePicUpdate) => {
+      res.status(200).json({
+        status: true,
+        result: profilePicUpdate,
+      });
+    })
+    .catch((error) => {
+      res.status(500).json({
+        status: false,
+        result: error,
+      });
+    });
+};
+
+exports.resetPassword = async (req, res, next) => {
+  let password = "0123";
+  let email = "user@gmail.com";
+  const getUser = await User.findOne({ email, password });
+  console.log(getUser, req.body.currentPassword);
 };

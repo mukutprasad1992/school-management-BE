@@ -8,6 +8,7 @@ userSchema = mongoose.Schema(
     mobileNumber: { type: Number, required: true },
     password: { type: String, required: true },
     roleId: { type: mongoose.Schema.ObjectId, ref: "roles", required: true },
+    profilePic: { type: String, required: false },
     status: {
       type: String,
       enum: ["INITIATED", "INPROGRESS", "ACTIVATED"],

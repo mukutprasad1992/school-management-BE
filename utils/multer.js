@@ -3,21 +3,20 @@ const multer = require("multer");
 const multerS3 = require("multer-s3");
 
 const s3 = new AWS.S3({
-  accessKeyId: "AKIA3YIAUSVUBHJMBLFH",
-  secretAccessKey: "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",
+  accessKeyId: `${process.env.AWS_ACCESS_KEY_ID}`,
+  secretAccessKey: `${process.env.AWS_SECRET_ACCESS_KEY}`,
 });
 
 exports.upload = multer({
   storage: multerS3({
     s3: s3,
-    bucket: "awsphaseonebucket",
+    acl: "public-read",
+    bucket: `${process.env.AWS_BUCKET}`,
     metadata: function (req, file, cb) {
-      console.log(file);
       cb(null, { fieldName: file.fieldname });
     },
     key: function (req, file, cb) {
-      console.info("File", file);
-      cb(null, Date.now().toString());
+      cb(null, `profile_pic_${Date.now().toString()}`);
     },
   }),
 });

@@ -19,7 +19,7 @@ router.post("/login", loginController.loginUser);
  * @description Updating data by id
  * @date 09-09-2022
  */
-router.put("/:userId", userController.updatedData);
+router.put("/:userId", userController.updatedUser);
 
 /**
  * @author Aman
@@ -75,9 +75,11 @@ router.post(
  * @date 10-09-2022
  */
 router.post(
-  "/profile-pic-upload",
+  "/profile-pic-upload/:userId",
   multerFileUpload.upload.single("profilePic"),
   userController.profilePicUpload
 );
+
+router.post("/reset-password/:userId", userController.resetPassword)
 
 module.exports = router;
