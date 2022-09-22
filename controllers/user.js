@@ -1,17 +1,18 @@
-const { hash } = require("bcrypt");
+var bcrypt = require("bcrypt");
 const User = require("../model/userData");
+const messages = require("../constant/messages");
+const httpCodes = require("../constant/status");
 
 exports.getUsers = (req, res, next) => {
   User.find()
     .then((users) => {
-      console.info("users", users);
-      res.status(200).json({
+      res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,
         result: users,
       });
     })
     .catch((error) => {
-      res.status(500).json({
+      res.status(httpCodes.statusCodes.internalServerErrorCode).json({
         status: false,
         result: error,
       });
@@ -19,16 +20,16 @@ exports.getUsers = (req, res, next) => {
 };
 
 exports.getUserById = (req, res, next) => {
-  User.findById(req.params.userId)
+  User.findById(req.user._doc._id)
     .populate("roleId")
     .then((getUser) => {
-      res.status(200).json({
+      res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,
         result: getUser,
       });
     })
     .catch((error) => {
-      res.status(500).json({
+      res.status(httpCodes.statusCodes.internalServerErrorCode).json({
         status: false,
         result: error,
       });
@@ -36,15 +37,15 @@ exports.getUserById = (req, res, next) => {
 };
 
 exports.deleteUserById = (req, res, next) => {
-  User.deleteOne({ __id: req.params.userId })
+  User.deleteOne({ __id: req.user._doc._id })
     .then((UserDeleted) => {
-      res.status(200).json({
+      res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,
         result: UserDeleted,
       });
     })
     .catch((error) => {
-      res.status(500).json({
+      res.status(httpCodes.statusCodes.internalServerErrorCode).json({
         status: false,
         result: error,
       });
@@ -53,7 +54,7 @@ exports.deleteUserById = (req, res, next) => {
 
 exports.updatedUser = (req, res, next) => {
   User.findOneAndUpdate(
-    ({ __id: req.params.userId },
+    ({ __id: req.user._doc._id },
     {
       $set: {
         firstName: req.body.firstName,
@@ -65,13 +66,13 @@ exports.updatedUser = (req, res, next) => {
     })
   )
     .then((DataUpdate) => {
-      res.status(200).json({
+      res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,
         result: DataUpdate,
       });
     })
     .catch((error) => {
-      res.status(500).json({
+      res.status(httpCodes.statusCodes.internalServerErrorCode).json({
         status: false,
         result: error,
       });
@@ -80,7 +81,7 @@ exports.updatedUser = (req, res, next) => {
 
 exports.profilePicUpload = (req, res, next) => {
   User.findOneAndUpdate(
-    ({ __id: req.params.userId },
+    ({ __id: req.user._doc._id },
     {
       $set: {
         profilePic: req.file.key,
@@ -88,13 +89,13 @@ exports.profilePicUpload = (req, res, next) => {
     })
   )
     .then((profilePicUpdate) => {
-      res.status(200).json({
+      res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,
         result: profilePicUpdate,
       });
     })
     .catch((error) => {
-      res.status(500).json({
+      res.status(httpCodes.statusCodes.internalServerErrorCode).json({
         status: false,
         result: error,
       });
@@ -102,8 +103,51 @@ exports.profilePicUpload = (req, res, next) => {
 };
 
 exports.resetPassword = async (req, res, next) => {
-  let password = "0123";
-  let email = "user@gmail.com";
-  const getUser = await User.findOne({ email, password });
-  console.log(getUser, req.body.currentPassword);
+  const getUser = await User.findOne({ _id: req.user._doc._id });
+  bcrypt.compare(
+    req.body.currentPassword,
+    getUser.password,
+    function (error, result) {
+      if (error) {
+        return { status: false, result: error };
+      }
+      if (req.body.newPassword === req.body.confirmNewPassword) {
+        console.info("req.body.newPassword", req.body.newPassword);
+        bcrypt.hash(req.body.newPassword, 10, (error, hash) => {
+          if (error) {
+            return res.status(500).json({
+              status: false,
+              result: error,
+            });
+          }
+          User.findOneAndUpdate(
+            ({ __id: req.user._doc._id },
+            {
+              $set: {
+                password: hash,
+              },
+            })
+          )
+            .then((userUpdated) => {
+              res.status(httpCodes.statusCodes.successStatusCode).json({
+                status: true,
+                result: userUpdated,
+              });
+            })
+            .catch((error) => {
+              res.status(httpCodes.statusCodes.internalServerErrorCode).json({
+                status: false,
+                result: error,
+              });
+            });
+        });
+      } else {
+        return {
+          status: false,
+          result: messages.errorMessages.passwordNotMatch,
+        };
+      }
+      console.log(result);
+    }
+  );
 };

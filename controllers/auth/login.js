@@ -1,46 +1,49 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-var User = require("../../model/userData");
+const User = require("../../model/userData");
+const messages = require("../../constant/messages");
+const httpCodes = require("../../constant/status");
 
 exports.loginUser = (req, res, next) => {
-  User.find({ email: req.body.email })
+  User.findOne({ email: req.body.email })
     .exec()
     .then((user) => {
-      if (user.length < 1) {
-        return res.status(401).json({
-          Result: "user not found",
+      if (!user) {
+        return res.status(httpCodes.statusCodes.userNotFound).json({
+          status: false,
+          result: messages.errorMessages.userNotFound,
         });
-      }
-      bcrypt.compare(
-        req.body.password,
-        user[user.length - 1].password,
-        (error, result) => {
+      } else {
+        bcrypt.compare(req.body.password, user.password, (error, result) => {
+          console.log(req.body.password, result);
           if (error) {
-            return res.status(401).json({
+            res.status(httpCodes.statusCodes.passwordDoesNotMatch).json({
               status: false,
               result: error,
             });
-          } else {
+          } else if (result) {
             const token = jwt.sign(
+              { ...user },
+              `${process.env.JWT_SECRET_KEY}`,
               {
-                ...user[0],
-              },
-              "SchoolManagementSystem",
-              {
-                expiresIn: "24h",
+                expiresIn: `${process.env.JWT_EXPIRE_TIME}`,
               }
             );
-            console.log(token);
-            res.status(200).json({
+            res.status(httpCodes.statusCodes.successStatusCode).json({
               status: true,
               token,
             });
+          } else {
+            res.status(httpCodes.statusCodes.passwordDoesNotMatch).json({
+              status: false,
+              result: messages.errorMessages.wrongPassword,
+            });
           }
-        }
-      );
+        });
+      }
     })
     .catch((error) => {
-      res.status(500).json({
+      res.status(httpCodes.statusCodes.internalServerErrorCode).json({
         error: error,
       });
     });

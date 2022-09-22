@@ -1,11 +1,12 @@
-require("../constant/common");
+require("../constant/status");
 const { body } = require("express-validator");
-var express = require("express");
-var router = express.Router();
-var registerController = require("../controllers/auth/register");
-var loginController = require("../controllers/auth/login");
-var userController = require("../controllers/user");
-var multerFileUpload = require("../utils/multer");
+const express = require("express");
+const router = express.Router();
+const registerController = require("../controllers/auth/register");
+const loginController = require("../controllers/auth/login");
+const userController = require("../controllers/user");
+const multerFileUpload = require("../utils/multer");
+const middleware = require("../middleware/auth");
 
 /**
  * @author Aman
@@ -19,28 +20,28 @@ router.post("/login", loginController.loginUser);
  * @description Updating data by id
  * @date 09-09-2022
  */
-router.put("/:userId", userController.updatedUser);
+router.put("/", middleware.authMiddleware, userController.updatedUser);
 
 /**
  * @author Aman
  * @description Deleting data by id
  * @date 09-09-2022
  */
-router.delete("/:userId", userController.deleteUserById);
+router.delete("/", middleware.authMiddleware, userController.deleteUserById);
 
 /**
  * @author Aman
  * @description Getting data by id
  * @date 09-09-2022
  */
-router.get("/:userId", userController.getUserById);
+router.get("/", middleware.authMiddleware, userController.getUserById);
 
 /**
  * @author Aman
  * @description Getting all registerd users data
  * @date 09-09-2022
  */
-router.get("/", userController.getUsers);
+router.get("/all-users", middleware.authMiddleware, userController.getUsers);
 
 /**
  * @author Aman
@@ -72,14 +73,24 @@ router.post(
 /**
  * @author Aman
  * @description Uploading profile pic & add validation
- * @date 10-09-2022
+ * @date 19-09-2022
  */
 router.post(
-  "/profile-pic-upload/:userId",
+  "/profile-pic-upload",
   multerFileUpload.upload.single("profilePic"),
+  middleware.authMiddleware,
   userController.profilePicUpload
 );
 
-router.post("/reset-password/:userId", userController.resetPassword)
+/**
+ * @author Aman
+ * @description Uploading profile pic & add validation
+ * @date 20-09-2022
+ */
+router.post(
+  "/reset-password",
+  middleware.authMiddleware,
+  userController.resetPassword
+);
 
 module.exports = router;

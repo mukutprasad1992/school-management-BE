@@ -1,4 +1,3 @@
-require("../constant/common");
 const { body } = require("express-validator");
 var express = require("express");
 var router = express.Router();
