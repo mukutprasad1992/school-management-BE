@@ -1,23 +1,26 @@
-const Role = require("../model/roleData");
+const State = require("../model/stateData");
 const { validationResult } = require("express-validator");
 const httpCodes = require("../constant/status");
 
-exports.createRole = (req, res, next) => {
+exports.createState = (req, res, next) => {
   // Validate request {params | query | body}
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.status(httpCodes.statusCodes.badRequest).json({ status: false, result: errors.array() });
+    return res
+      .status(httpCodes.statusCodes.badRequest)
+      .json({ status: false, result: errors.array() });
   }
   // End validation
-  var role = new Role({
-    roleName: req.body.roleName,
+  var state = new State({
+    stateName: req.body.stateName,
+    countryId: req.body.countryId,
   });
-  return role
+  return state
     .save()
-    .then((createRole) => {
+    .then((createState) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,
-        result: createRole,
+        result: createState,
       });
     })
     .catch((error) => {
@@ -28,13 +31,13 @@ exports.createRole = (req, res, next) => {
     });
 };
 
-exports.getroles = (req, res, next) => {
-  Role.find()
-    .then((roles) => {
-      console.info("roles", roles);
+exports.getstates = (req, res, next) => {
+  State.find()
+    .then((states) => {
+      console.info("states", states);
       res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,
-        result: roles,
+        result: states,
       });
     })
     .catch((error) => {
@@ -45,12 +48,13 @@ exports.getroles = (req, res, next) => {
     });
 };
 
-exports.getroleById = (req, res, next) => {
-  Role.findById(req.params.roleId)
-    .then((getRole) => {
+exports.getstateById = (req, res, next) => {
+  State.findById(req.params.stateId)
+    .populate("countryId")
+    .then((getState) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,
-        result: getRole,
+        result: getState,
       });
     })
     .catch((error) => {
@@ -61,35 +65,35 @@ exports.getroleById = (req, res, next) => {
     });
 };
 
-exports.deleteRoleById = (req, res, next) => {
-  Role.deleteOne({ __id: req.params.roleId })
-    .then((roleDeleted) => {
-      res.status(httpCodes.statusCodes.successStatusCode).json({
-        status: true,
-        result: roleDeleted,
-      });
-    })
-    .catch((error) => {
-      res.status(httpCodes.statusCodes.internalServerErrorCode).json({
-        status: false,
-        result: error,
-      });
-    });
-};
-
-exports.updateRole = (req, res, next) => {
-  Role.findOneAndUpdate(
-    ({ __id: req.params.roleId },
+exports.updateState = (req, res, next) => {
+  State.findOneAndUpdate(
+    ({ __id: req.params.stateId },
     {
       $set: {
-        roleName: req.body.roleName,
+        stateName: req.body.stateName,
       },
     })
   )
-    .then((roleUpdate) => {
+    .then((stateUpdate) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,
-        result: roleUpdate,
+        result: stateUpdate,
+      });
+    })
+    .catch((error) => {
+      res.status(httpCodes.statusCodes.internalServerErrorCode).json({
+        status: false,
+        result: error,
+      });
+    });
+};
+
+exports.deleteStateById = (req, res, next) => {
+  State.deleteOne({ __id: req.params.stateId })
+    .then((stateDeleted) => {
+      res.status(httpCodes.statusCodes.successStatusCode).json({
+        status: true,
+        result: stateDeleted,
       });
     })
     .catch((error) => {

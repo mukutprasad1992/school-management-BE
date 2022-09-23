@@ -115,10 +115,12 @@ exports.resetPassword = async (req, res, next) => {
         console.info("req.body.newPassword", req.body.newPassword);
         bcrypt.hash(req.body.newPassword, 10, (error, hash) => {
           if (error) {
-            return res.status(500).json({
-              status: false,
-              result: error,
-            });
+            return res
+              .status(httpCodes.statusCodes.internalServerErrorCode)
+              .json({
+                status: false,
+                result: error,
+              });
           }
           User.findOneAndUpdate(
             ({ __id: req.user._doc._id },

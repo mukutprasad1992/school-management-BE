@@ -6,6 +6,9 @@ require("dotenv").config();
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var rolesRouter = require("./routes/roles");
+var countryRouter = require("./routes/countries");
+var stateRouter = require("./routes/states");
+var cityRouter = require("./routes/cities");
 
 require("./config/db_config");
 
@@ -24,6 +27,9 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/roles", rolesRouter);
+app.use("/countries", countryRouter);
+app.use("/cities", cityRouter);
+app.use("/states", stateRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

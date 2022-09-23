@@ -3,5 +3,5 @@ exports.errorMessages = {
   unauthorizedUser: "You are not authorized or your token has been expired!!!",
   wrongPassword: "Password incorrect. Pleasa enter correct password",
   passwordNotMatch: "newPassword and confirmNewpassword not matched",
-  emailAlreadyExists: "Email id already exists. Please use another email id"
+  emailAlreadyExists: "Email id already exists. Please use another email id",
 };
