@@ -2,7 +2,7 @@ var mongoose = require("mongoose");
 
 countrySchema = mongoose.Schema(
   {
-    countryName: { type: String, required: true },
+    name: { type: String, required: true },
   },
   { timestamps: true }
 );

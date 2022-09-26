@@ -6,11 +6,13 @@ exports.createRole = (req, res, next) => {
   // Validate request {params | query | body}
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.status(httpCodes.statusCodes.badRequest).json({ status: false, result: errors.array() });
+    return res
+      .status(httpCodes.statusCodes.badRequest)
+      .json({ status: false, result: errors.array() });
   }
   // End validation
   var role = new Role({
-    roleName: req.body.roleName,
+    name: req.body.name,
   });
   return role
     .save()
@@ -82,7 +84,7 @@ exports.updateRole = (req, res, next) => {
     ({ __id: req.params.roleId },
     {
       $set: {
-        roleName: req.body.roleName,
+        name: req.body.name,
       },
     })
   )

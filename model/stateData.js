@@ -2,7 +2,7 @@ var mongoose = require("mongoose");
 
 stateSchema = mongoose.Schema(
   {
-    stateName: { type: String, required: true },
+    name: { type: String, required: true },
     countryId: {
       type: mongoose.Schema.ObjectId,
       ref: "countries",

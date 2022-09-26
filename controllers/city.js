@@ -12,7 +12,7 @@ exports.createCity = (req, res, next) => {
   }
   // End validation
   var city = new City({
-    cityName: req.body.cityName,
+    name: req.body.name,
     stateId: req.body.stateId,
     countryId: req.body.countryId,
   });
@@ -71,10 +71,10 @@ exports.getCityById = (req, res, next) => {
 
 exports.updateCity = (req, res, next) => {
   City.findOneAndUpdate(
-    ({ __id: req.params.stateId },
+    ({ __id: req.params.cityId },
     {
       $set: {
-        cityName: req.body.cityName,
+        name: req.body.name,
         stateId: req.body.stateId,
         countryId: req.body.countryId,
       },

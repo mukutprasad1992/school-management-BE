@@ -2,7 +2,7 @@ var mongoose = require("mongoose");
 
 roleSchema = mongoose.Schema(
   {
-    roleName: { type: String, required: true },
+    name: { type: String, required: true },
   },
   { timestamps: true }
 );

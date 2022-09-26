@@ -1,8 +1,8 @@
-const Country = require("../model/countryData");
+const School = require("../model/schoolData");
 const { validationResult } = require("express-validator");
 const httpCodes = require("../constant/status");
 
-exports.createCountry = (req, res, next) => {
+exports.createSchool = (req, res, next) => {
   // Validate request {params | query | body}
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -11,16 +11,23 @@ exports.createCountry = (req, res, next) => {
       .json({ status: false, result: errors.array() });
   }
   // End validation
-  var country = new Country({
+  var school = new School({
+    user: req.user._doc._id,
     name: req.body.name,
-    // countryId: req.body.countryId,
+    email: req.body.email,
+    phoneNumber: req.body.phoneNumber,
+    country: req.body.country,
+    state: req.body.state,
+    city: req.body.city,
+    address: req.body.address,
+    pinCode: req.body.pinCode,
   });
-  return country
+  return school
     .save()
-    .then((createCountry) => {
+    .then((createSchool) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,
-        result: createCountry,
+        result: createSchool,
       });
     })
     .catch((error) => {
@@ -31,13 +38,13 @@ exports.createCountry = (req, res, next) => {
     });
 };
 
-exports.getcountries = (req, res, next) => {
-  Country.find()
-    .then((countries) => {
-      console.info("countries", countries);
+exports.getSchools = (req, res, next) => {
+  School.find()
+    .then((schools) => {
+      console.info("schools", schools);
       res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,
-        result: countries,
+        result: schools,
       });
     })
     .catch((error) => {
@@ -48,12 +55,17 @@ exports.getcountries = (req, res, next) => {
     });
 };
 
-exports.getcountryById = (req, res, next) => {
-  Country.findById(req.params.countryId)
-    .then((getCountry) => {
+exports.getSchoolById = (req, res, next) => {
+  School.findById(req.params.schoolId)
+    .populate("user")
+    .populate("city")
+    .populate("state")
+    .populate("country")
+
+    .then((getSchool) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,
-        result: getCountry,
+        result: getSchool,
       });
     })
     .catch((error) => {
@@ -64,19 +76,19 @@ exports.getcountryById = (req, res, next) => {
     });
 };
 
-exports.updateCountry = (req, res, next) => {
-  Country.findOneAndUpdate(
-    ({ __id: req.params.countryId },
+exports.updateSchool = (req, res, next) => {
+  School.findOneAndUpdate(
+    ({ __id: req.params.schoolId },
     {
       $set: {
         name: req.body.name,
       },
     })
   )
-    .then((countryUpdate) => {
+    .then((schoolUpdate) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,
-        result: countryUpdate,
+        result: schoolUpdate,
       });
     })
     .catch((error) => {
@@ -87,12 +99,12 @@ exports.updateCountry = (req, res, next) => {
     });
 };
 
-exports.deleteCountryById = (req, res, next) => {
-  Country.deleteOne({ __id: req.params.countryId })
-    .then((countryDeleted) => {
+exports.deleteSchoolById = (req, res, next) => {
+  School.deleteOne({ __id: req.params.schoolId })
+    .then((schoolDeleted) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,
-        result: countryDeleted,
+        result: schoolDeleted,
       });
     })
     .catch((error) => {

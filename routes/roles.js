@@ -10,9 +10,7 @@ var roleController = require("../controllers/role");
  */
 router.post(
   "/",
-  body("roleName")
-    .isLength({ min: 1 })
-    .withMessage("roleName must not be empty"),
+  body("name").isLength({ min: 1 }).withMessage("Role name must not be empty"),
   roleController.createRole
 );
 
@@ -23,9 +21,7 @@ router.post(
  */
 router.put(
   "/:roleId",
-  body("roleName")
-    .isLength({ min: 1 })
-    .withMessage("roleName must not be empty"),
+  body("name").isLength({ min: 1 }).withMessage("Role name must not be empty"),
   roleController.updateRole
 );
 

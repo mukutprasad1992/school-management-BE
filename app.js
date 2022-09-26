@@ -9,6 +9,8 @@ var rolesRouter = require("./routes/roles");
 var countryRouter = require("./routes/countries");
 var stateRouter = require("./routes/states");
 var cityRouter = require("./routes/cities");
+var schoolRouter = require("./routes/schools");
+var classRouter = require("./routes/classes");
 
 require("./config/db_config");
 
@@ -30,6 +32,8 @@ app.use("/roles", rolesRouter);
 app.use("/countries", countryRouter);
 app.use("/cities", cityRouter);
 app.use("/states", stateRouter);
+app.use("/schools", schoolRouter);
+app.use("/classes", classRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

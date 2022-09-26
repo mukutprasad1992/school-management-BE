@@ -7,39 +7,37 @@ const stateController = require("../controllers/state");
 /**
  * @author Aman
  * @description Creating states & validation
- * @date 10-09-2022
+ * @date 23-09-2022
  */
 router.post(
   "/",
   middleware.authMiddleware,
-  body("stateName")
-    .isLength({ min: 1 })
-    .withMessage("State name must not be empty"),
+  body("name").isLength({ min: 1 }).withMessage("State name must not be empty"),
   stateController.createState
 );
 
 /**
  * @author Aman
  * @description Getting all states
- * @date 09-09-2022
+ * @date 23-09-2022
  */
 router.get("/", stateController.getstates);
 
 /**
  * @author Aman
  * @description Getting state by id
- * @date 09-09-2022
+ * @date 23-09-2022
  */
 router.get("/:stateId", stateController.getstateById);
 
 /**
  * @author Aman
  * @description Updating state by id
- * @date 09-09-2022
+ * @date 23-09-2022
  */
 router.put(
   "/:stateId",
-  body("stateName")
+  body("name")
     .isLength({ min: 1 })
     .withMessage("State name must not be empty"),
   stateController.updateState
@@ -48,7 +46,7 @@ router.put(
 /**
  * @author Aman
  * @description Deleting state by id
- * @date 09-09-2022
+ * @date 23-09-2022
  */
 router.delete("/:stateId", stateController.deleteStateById);
 

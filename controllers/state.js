@@ -12,7 +12,7 @@ exports.createState = (req, res, next) => {
   }
   // End validation
   var state = new State({
-    stateName: req.body.stateName,
+    name: req.body.name,
     countryId: req.body.countryId,
   });
   return state
@@ -70,7 +70,7 @@ exports.updateState = (req, res, next) => {
     ({ __id: req.params.stateId },
     {
       $set: {
-        stateName: req.body.stateName,
+        name: req.body.name,
       },
     })
   )
