@@ -21,6 +21,8 @@ exports.createSchool = (req, res, next) => {
     city: req.body.city,
     address: req.body.address,
     pinCode: req.body.pinCode,
+    createdBy: req.user._doc._id,
+    updatedBy: req.user._doc._id,
   });
   return school
     .save()
@@ -40,6 +42,8 @@ exports.createSchool = (req, res, next) => {
 
 exports.getSchools = (req, res, next) => {
   School.find()
+    .populate("createdBy")
+    .populate("updatedBy")
     .then((schools) => {
       console.info("schools", schools);
       res.status(httpCodes.statusCodes.successStatusCode).json({
@@ -61,6 +65,8 @@ exports.getSchoolById = (req, res, next) => {
     .populate("city")
     .populate("state")
     .populate("country")
+    .populate("createdBy")
+    .populate("updatedBy")
 
     .then((getSchool) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
@@ -105,6 +111,29 @@ exports.deleteSchoolById = (req, res, next) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,
         result: schoolDeleted,
+      });
+    })
+    .catch((error) => {
+      res.status(httpCodes.statusCodes.internalServerErrorCode).json({
+        status: false,
+        result: error,
+      });
+    });
+};
+
+exports.schoolActivation = (req, res, next) => {
+  School.findOneAndUpdate(
+    { __id: req.params.schoolId },
+    {
+      $set: {
+        status: "ACTIVATED",
+      },
+    }
+  )
+    .then((activationUpdate) => {
+      res.status(httpCodes.statusCodes.successStatusCode).json({
+        status: true,
+        result: activationUpdate,
       });
     })
     .catch((error) => {

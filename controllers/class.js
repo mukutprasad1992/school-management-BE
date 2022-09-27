@@ -15,6 +15,8 @@ exports.createClass = (req, res, next) => {
     name: req.body.name,
     user: req.user._doc._id,
     school: req.body.school,
+    createdBy: req.user._doc._id,
+    updatedBy: req.user._doc._id,
   });
   return classes
     .save()
@@ -34,6 +36,8 @@ exports.createClass = (req, res, next) => {
 
 exports.getClasses = (req, res, next) => {
   Class.find()
+    .populate("createdBy")
+    .populate("updatedBy")
     .then((classes) => {
       console.info("classes", classes);
       res.status(httpCodes.statusCodes.successStatusCode).json({
@@ -53,6 +57,8 @@ exports.getClassById = (req, res, next) => {
   Class.findById(req.params.classId)
     .populate("school")
     .populate("user")
+    .populate("createdBy")
+    .populate("updatedBy")
     .then((getClass) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,

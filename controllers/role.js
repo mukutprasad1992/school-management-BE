@@ -13,6 +13,8 @@ exports.createRole = (req, res, next) => {
   // End validation
   var role = new Role({
     name: req.body.name,
+    createdBy: req.user._doc._id,
+    updatedBy: req.user._doc._id,
   });
   return role
     .save()
@@ -32,6 +34,8 @@ exports.createRole = (req, res, next) => {
 
 exports.getroles = (req, res, next) => {
   Role.find()
+    .populate("createdBy")
+    .populate("updatedBy")
     .then((roles) => {
       console.info("roles", roles);
       res.status(httpCodes.statusCodes.successStatusCode).json({
@@ -49,6 +53,8 @@ exports.getroles = (req, res, next) => {
 
 exports.getroleById = (req, res, next) => {
   Role.findById(req.params.roleId)
+    .populate("createdBy")
+    .populate("updatedBy")
     .then((getRole) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,

@@ -65,4 +65,15 @@ router.put(
  */
 router.delete("/:schoolId", schoolController.deleteSchoolById);
 
+/**
+ * @author Aman
+ * @description school activation
+ * @date 27-09-2022
+ */
+ router.put(
+  "/school-activation/:schoolId",
+  middleware.authMiddleware,
+  schoolController.schoolActivation
+);
+
 module.exports = router;

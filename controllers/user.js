@@ -153,3 +153,26 @@ exports.resetPassword = async (req, res, next) => {
     }
   );
 };
+
+exports.userActivation = (req, res, next) => {
+  User.findOneAndUpdate(
+    { __id: req.params.userId },
+    {
+      $set: {
+        status: "ACTIVATED",
+      },
+    }
+  )
+    .then((activationUpdate) => {
+      res.status(httpCodes.statusCodes.successStatusCode).json({
+        status: true,
+        result: activationUpdate,
+      });
+    })
+    .catch((error) => {
+      res.status(httpCodes.statusCodes.internalServerErrorCode).json({
+        status: false,
+        result: error,
+      });
+    });
+};

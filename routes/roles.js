@@ -1,7 +1,8 @@
 const { body } = require("express-validator");
-var express = require("express");
-var router = express.Router();
-var roleController = require("../controllers/role");
+const express = require("express");
+const router = express.Router();
+const roleController = require("../controllers/role");
+const middleware = require("../middleware/auth");
 
 /**
  * @author Aman
@@ -10,6 +11,7 @@ var roleController = require("../controllers/role");
  */
 router.post(
   "/",
+  middleware.authMiddleware,
   body("name").isLength({ min: 1 }).withMessage("Role name must not be empty"),
   roleController.createRole
 );
@@ -21,6 +23,7 @@ router.post(
  */
 router.put(
   "/:roleId",
+  middleware.authMiddleware,
   body("name").isLength({ min: 1 }).withMessage("Role name must not be empty"),
   roleController.updateRole
 );
@@ -30,20 +33,24 @@ router.put(
  * @description Deleting role by id
  * @date 09-09-2022
  */
-router.delete("/:roleId", roleController.deleteRoleById);
+router.delete(
+  "/:roleId",
+  middleware.authMiddleware,
+  roleController.deleteRoleById
+);
 
 /**
  * @author Aman
  * @description Getting role by id
  * @date 09-09-2022
  */
-router.get("/:roleId", roleController.getroleById);
+router.get("/:roleId", middleware.authMiddleware, roleController.getroleById);
 
 /**
  * @author Aman
  * @description Getting all roles
  * @date 09-09-2022
  */
-router.get("/", roleController.getroles);
+router.get("/", middleware.authMiddleware, roleController.getroles);
 
 module.exports = router;

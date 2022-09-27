@@ -93,4 +93,15 @@ router.post(
   userController.resetPassword
 );
 
+/**
+ * @author Aman
+ * @description User activation
+ * @date 27-09-2022
+ */
+router.put(
+  "/user-activation/:userId",
+  middleware.authMiddleware,
+  userController.userActivation
+);
+
 module.exports = router;
