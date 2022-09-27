@@ -27,7 +27,7 @@ exports.createUser = async (req, res, next) => {
         return res.status(httpCodes.statusCodes.internalServerErrorCode).json({
           status: false,
           result: error,
-        }); 
+        });
       } else {
         var user = new User({
           firstName: req.body.firstName,
@@ -35,6 +35,7 @@ exports.createUser = async (req, res, next) => {
           email: req.body.email,
           mobileNumber: req.body.mobileNumber,
           password: hash,
+          role: req.body.role,
           roleId: req.body.roleId,
         });
         return user

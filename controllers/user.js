@@ -5,6 +5,7 @@ const httpCodes = require("../constant/status");
 
 exports.getUsers = (req, res, next) => {
   User.find()
+    .populate("role")
     .then((users) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,
@@ -21,7 +22,7 @@ exports.getUsers = (req, res, next) => {
 
 exports.getUserById = (req, res, next) => {
   User.findById(req.user._doc._id)
-    .populate("roleId")
+    .populate("role")
     .then((getUser) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,
@@ -61,7 +62,7 @@ exports.updatedUser = (req, res, next) => {
         lastName: req.body.lastName,
         email: req.body.email,
         mobileNumber: req.body.mobileNumber,
-        password: hash,
+        roleId: req.body.roleId,
       },
     })
   )
@@ -159,11 +160,12 @@ exports.userActivation = (req, res, next) => {
     { __id: req.params.userId },
     {
       $set: {
-        status: "ACTIVATED",
+        status: "TEST",
       },
     }
   )
     .then((activationUpdate) => {
+      console.log(activationUpdate);
       res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,
         result: activationUpdate,

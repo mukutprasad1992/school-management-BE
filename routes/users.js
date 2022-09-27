@@ -66,7 +66,7 @@ router.post(
   body("password")
     .isLength({ min: 1 })
     .withMessage("Password must not be empty"),
-  body("roleId").isLength({ min: 1 }).withMessage("Role id must not be empty"),
+  body("role").isLength({ min: 1 }).withMessage("Role id must not be empty"),
   registerController.createUser
 );
 

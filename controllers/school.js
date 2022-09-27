@@ -45,7 +45,6 @@ exports.getSchools = (req, res, next) => {
     .populate("createdBy")
     .populate("updatedBy")
     .then((schools) => {
-      console.info("schools", schools);
       res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,
         result: schools,

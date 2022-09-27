@@ -22,17 +22,25 @@ exports.loginUser = (req, res, next) => {
               result: error,
             });
           } else if (result) {
-            const token = jwt.sign(
-              { ...user },
-              `${process.env.JWT_SECRET_KEY}`,
-              {
-                expiresIn: `${process.env.JWT_EXPIRE_TIME}`,
-              }
-            );
-            res.status(httpCodes.statusCodes.successStatusCode).json({
-              status: true,
-              token,
-            });
+            console.log(user);
+            if (user.status !== "ACTIVATED") {
+              res.status(httpCodes.statusCodes.passwordDoesNotMatch).json({
+                status: false,
+                result: messages.errorMessages.userNotActivated,
+              });
+            } else {
+              const token = jwt.sign(
+                { ...user },
+                `${process.env.JWT_SECRET_KEY}`,
+                {
+                  expiresIn: `${process.env.JWT_EXPIRE_TIME}`,
+                }
+              );
+              res.status(httpCodes.statusCodes.successStatusCode).json({
+                status: true,
+                token,
+              });
+            }
           } else {
             res.status(httpCodes.statusCodes.passwordDoesNotMatch).json({
               status: false,
