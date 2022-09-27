@@ -156,13 +156,13 @@ exports.resetPassword = async (req, res, next) => {
 };
 
 exports.userActivation = (req, res, next) => {
-  User.findOneAndUpdate(
-    { __id: req.params.userId },
-    {
-      $set: {
-        status: "TEST",
-      },
-    }
+  User.find(
+    { _id: req.params.userId }
+    // {
+    //   $set: {
+    //     status: "ACTIVATED",
+    //   },
+    // }
   )
     .then((activationUpdate) => {
       console.log(activationUpdate);
