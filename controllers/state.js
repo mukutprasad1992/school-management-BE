@@ -2,7 +2,7 @@ const State = require("../model/stateData");
 const { validationResult } = require("express-validator");
 const httpCodes = require("../constant/status");
 
-exports.createState = (req, res, next) => {
+exports.createState = async (req, res, next) => {
   // Validate request {params | query | body}
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -15,7 +15,7 @@ exports.createState = (req, res, next) => {
     name: req.body.name,
     countryId: req.body.countryId,
   });
-  return state
+  return await state
     .save()
     .then((createState) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
@@ -31,8 +31,8 @@ exports.createState = (req, res, next) => {
     });
 };
 
-exports.getstates = (req, res, next) => {
-  State.find()
+exports.getstates = async (req, res, next) => {
+  await State.find()
     .then((states) => {
       console.info("states", states);
       res.status(httpCodes.statusCodes.successStatusCode).json({
@@ -48,8 +48,8 @@ exports.getstates = (req, res, next) => {
     });
 };
 
-exports.getstateById = (req, res, next) => {
-  State.findById(req.params.stateId)
+exports.getstateById = async (req, res, next) => {
+  await State.findById(req.params.stateId)
     .populate("countryId")
     .then((getState) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
@@ -65,8 +65,8 @@ exports.getstateById = (req, res, next) => {
     });
 };
 
-exports.updateState = (req, res, next) => {
-  State.findOneAndUpdate(
+exports.updateState = async (req, res, next) => {
+  await State.findOneAndUpdate(
     ({ __id: req.params.stateId },
     {
       $set: {
@@ -88,8 +88,8 @@ exports.updateState = (req, res, next) => {
     });
 };
 
-exports.deleteStateById = (req, res, next) => {
-  State.deleteOne({ __id: req.params.stateId })
+exports.deleteStateById = async (req, res, next) => {
+  await State.deleteOne({ __id: req.params.stateId })
     .then((stateDeleted) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,

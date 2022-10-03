@@ -3,8 +3,8 @@ const User = require("../model/userData");
 const messages = require("../constant/messages");
 const httpCodes = require("../constant/status");
 
-exports.getUsers = (req, res, next) => {
-  User.find()
+exports.getUsers = async (req, res, next) => {
+  await User.find()
     .populate("role")
     .then((users) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
@@ -20,8 +20,8 @@ exports.getUsers = (req, res, next) => {
     });
 };
 
-exports.getUserById = (req, res, next) => {
-  User.findById(req.user._doc._id)
+exports.getUserById = async (req, res, next) => {
+  await User.findById(req.user._doc._id)
     .populate("role")
     .then((getUser) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
@@ -37,8 +37,8 @@ exports.getUserById = (req, res, next) => {
     });
 };
 
-exports.deleteUserById = (req, res, next) => {
-  User.deleteOne({ __id: req.user._doc._id })
+exports.deleteUserById = async (req, res, next) => {
+  await User.deleteOne({ __id: req.user._doc._id })
     .then((UserDeleted) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,
@@ -53,8 +53,8 @@ exports.deleteUserById = (req, res, next) => {
     });
 };
 
-exports.updatedUser = (req, res, next) => {
-  User.findOneAndUpdate(
+exports.updatedUser = async (req, res, next) => {
+  await User.findOneAndUpdate(
     ({ __id: req.user._doc._id },
     {
       $set: {
@@ -80,8 +80,8 @@ exports.updatedUser = (req, res, next) => {
     });
 };
 
-exports.profilePicUpload = (req, res, next) => {
-  User.findOneAndUpdate(
+exports.profilePicUpload = async (req, res, next) => {
+  await User.findOneAndUpdate(
     ({ __id: req.user._doc._id },
     {
       $set: {
@@ -155,14 +155,14 @@ exports.resetPassword = async (req, res, next) => {
   );
 };
 
-exports.userActivation = (req, res, next) => {
-  User.find(
-    { _id: req.params.userId }
-    // {
-    //   $set: {
-    //     status: "ACTIVATED",
-    //   },
-    // }
+exports.userActivation = async (req, res, next) => {
+  await User.findOneAndUpdate(
+    { _id: req.params.userId },
+    {
+      $set: {
+        status: "ACTIVATED",
+      },
+    }
   )
     .then((activationUpdate) => {
       console.log(activationUpdate);

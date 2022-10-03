@@ -1,8 +1,8 @@
-const City = require("../model/cityData");
+const Subject = require("../model/subjectData");
 const { validationResult } = require("express-validator");
 const httpCodes = require("../constant/status");
 
-exports.createCity = async (req, res, next) => {
+exports.createSubject = async (req, res, next) => {
   // Validate request {params | query | body}
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -11,17 +11,18 @@ exports.createCity = async (req, res, next) => {
       .json({ status: false, result: errors.array() });
   }
   // End validation
-  var city = new City({
+  var subjects = new Subject({
     name: req.body.name,
-    stateId: req.body.stateId,
-    countryId: req.body.countryId,
+    class: req.body.class,
+    createdBy: req.user._doc._id,
+    updatedBy: req.user._doc._id,
   });
-  return await city
+  return await subjects
     .save()
-    .then((createCity) => {
+    .then((createSubject) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,
-        result: createCity,
+        result: createSubject,
       });
     })
     .catch((error) => {
@@ -32,15 +33,15 @@ exports.createCity = async (req, res, next) => {
     });
 };
 
-exports.getCities = async (req, res, next) => {
-  await City.find()
-    .populate("countryId")
-    .populate("stateId")
-    .then((cities) => {
-      console.info("cities", cities);
+exports.getSubjects = async (req, res, next) => {
+  await Subject.find()
+    .populate("class")
+    .populate("createdBy")
+    .populate("updatedBy")
+    .then((subjects) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,
-        result: cities,
+        result: subjects,
       });
     })
     .catch((error) => {
@@ -51,14 +52,15 @@ exports.getCities = async (req, res, next) => {
     });
 };
 
-exports.getCityById = async (req, res, next) => {
-  await City.findById(req.params.cityId)
-    .populate("countryId")
-    .populate("stateId")
-    .then((getCity) => {
+exports.getSubjectById = async (req, res, next) => {
+  await Subject.findById(req.params.subjectId)
+    .populate("class")
+    .populate("createdBy")
+    .populate("updatedBy")
+    .then((getsubject) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,
-        result: getCity,
+        result: getsubject,
       });
     })
     .catch((error) => {
@@ -69,21 +71,19 @@ exports.getCityById = async (req, res, next) => {
     });
 };
 
-exports.updateCity = async (req, res, next) => {
-  await City.findOneAndUpdate(
-    ({ __id: req.params.cityId },
+exports.updateSubject = async (req, res, next) => {
+  await Subject.findOneAndUpdate(
+    ({ __id: req.params.subjectId },
     {
       $set: {
         name: req.body.name,
-        stateId: req.body.stateId,
-        countryId: req.body.countryId,
       },
     })
   )
-    .then((cityUpdate) => {
+    .then((subjectUpdate) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,
-        result: cityUpdate,
+        result: subjectUpdate,
       });
     })
     .catch((error) => {
@@ -94,12 +94,12 @@ exports.updateCity = async (req, res, next) => {
     });
 };
 
-exports.deleteCityById = async (req, res, next) => {
-  await City.deleteOne({ __id: req.params.cityId })
-    .then((cityDeleted) => {
+exports.deleteSubjectById = async (req, res, next) => {
+  await Subject.deleteOne({ __id: req.params.subjectId })
+    .then((subjectDeleted) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,
-        result: cityDeleted,
+        result: subjectDeleted,
       });
     })
     .catch((error) => {

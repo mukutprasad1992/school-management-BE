@@ -4,8 +4,8 @@ const User = require("../../model/userData");
 const messages = require("../../constant/messages");
 const httpCodes = require("../../constant/status");
 
-exports.loginUser = (req, res, next) => {
-  User.findOne({ email: req.body.email })
+exports.loginUser = async (req, res, next) => {
+  await User.findOne({ email: req.body.email })
     .exec()
     .then((user) => {
       if (!user) {
@@ -22,7 +22,7 @@ exports.loginUser = (req, res, next) => {
               result: error,
             });
           } else if (result) {
-            console.log(user);
+            // console.log(user);
             if (user.status !== "ACTIVATED") {
               res.status(httpCodes.statusCodes.passwordDoesNotMatch).json({
                 status: false,

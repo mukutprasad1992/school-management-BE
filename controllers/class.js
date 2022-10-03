@@ -2,7 +2,7 @@ const Class = require("../model/classData");
 const { validationResult } = require("express-validator");
 const httpCodes = require("../constant/status");
 
-exports.createClass = (req, res, next) => {
+exports.createClass = async (req, res, next) => {
   // Validate request {params | query | body}
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -13,12 +13,12 @@ exports.createClass = (req, res, next) => {
   // End validation
   var classes = new Class({
     name: req.body.name,
-    user: req.user._doc._id,
+    classTeacher: req.body.classTeacher,
     school: req.body.school,
     createdBy: req.user._doc._id,
     updatedBy: req.user._doc._id,
   });
-  return classes
+  return await classes
     .save()
     .then((createClass) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
@@ -34,12 +34,11 @@ exports.createClass = (req, res, next) => {
     });
 };
 
-exports.getClasses = (req, res, next) => {
-  Class.find()
+exports.getClasses = async (req, res, next) => {
+  await Class.find()
     .populate("createdBy")
     .populate("updatedBy")
     .then((classes) => {
-      console.info("classes", classes);
       res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,
         result: classes,
@@ -53,10 +52,9 @@ exports.getClasses = (req, res, next) => {
     });
 };
 
-exports.getClassById = (req, res, next) => {
-  Class.findById(req.params.classId)
+exports.getClassById = async (req, res, next) => {
+  await Class.findById(req.params.classId)
     .populate("school")
-    .populate("user")
     .populate("createdBy")
     .populate("updatedBy")
     .then((getClass) => {
@@ -73,8 +71,8 @@ exports.getClassById = (req, res, next) => {
     });
 };
 
-exports.updateClass = (req, res, next) => {
-  Class.findOneAndUpdate(
+exports.updateClass = async (req, res, next) => {
+  await Class.findOneAndUpdate(
     ({ __id: req.params.classId },
     {
       $set: {
@@ -96,8 +94,8 @@ exports.updateClass = (req, res, next) => {
     });
 };
 
-exports.deleteClassById = (req, res, next) => {
-  Class.deleteOne({ __id: req.params.classId })
+exports.deleteClassById = async (req, res, next) => {
+  await Class.deleteOne({ __id: req.params.classId })
     .then((classDeleted) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,

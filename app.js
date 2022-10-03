@@ -11,6 +11,16 @@ var stateRouter = require("./routes/states");
 var cityRouter = require("./routes/cities");
 var schoolRouter = require("./routes/schools");
 var classRouter = require("./routes/classes");
+var subjectRouter = require("./routes/subjects");
+var periodRouter = require("./routes/periods");
+// var Email = require("./utils/sendEmail");
+// let mailDetails = {
+//   from: "amanm4345@gmail.com",
+//   to: "amanm3033@gmail.com",
+//   subject: "Test mail",
+//   text: "Node.js testing mail",
+// };
+// Email.sendEmail(mailDetails);
 
 require("./config/db_config");
 
@@ -34,6 +44,8 @@ app.use("/cities", cityRouter);
 app.use("/states", stateRouter);
 app.use("/schools", schoolRouter);
 app.use("/classes", classRouter);
+app.use("/subjects", subjectRouter);
+app.use("/periods", periodRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

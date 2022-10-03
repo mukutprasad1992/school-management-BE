@@ -2,7 +2,7 @@ const Role = require("../model/roleData");
 const { validationResult } = require("express-validator");
 const httpCodes = require("../constant/status");
 
-exports.createRole = (req, res, next) => {
+exports.createRole = async (req, res, next) => {
   // Validate request {params | query | body}
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -16,7 +16,7 @@ exports.createRole = (req, res, next) => {
     createdBy: req.user._doc._id,
     updatedBy: req.user._doc._id,
   });
-  return role
+  return await role
     .save()
     .then((createRole) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
@@ -32,8 +32,8 @@ exports.createRole = (req, res, next) => {
     });
 };
 
-exports.getroles = (req, res, next) => {
-  Role.find()
+exports.getroles = async (req, res, next) => {
+  await Role.find()
     .populate("createdBy")
     .populate("updatedBy")
     .then((roles) => {
@@ -51,8 +51,8 @@ exports.getroles = (req, res, next) => {
     });
 };
 
-exports.getroleById = (req, res, next) => {
-  Role.findById(req.params.roleId)
+exports.getroleById = async (req, res, next) => {
+  await Role.findById(req.params.roleId)
     .populate("createdBy")
     .populate("updatedBy")
     .then((getRole) => {
@@ -69,8 +69,8 @@ exports.getroleById = (req, res, next) => {
     });
 };
 
-exports.deleteRoleById = (req, res, next) => {
-  Role.deleteOne({ __id: req.params.roleId })
+exports.deleteRoleById = async (req, res, next) => {
+  await Role.deleteOne({ __id: req.params.roleId })
     .then((roleDeleted) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,
@@ -85,8 +85,8 @@ exports.deleteRoleById = (req, res, next) => {
     });
 };
 
-exports.updateRole = (req, res, next) => {
-  Role.findOneAndUpdate(
+exports.updateRole = async (req, res, next) => {
+  await Role.findOneAndUpdate(
     ({ __id: req.params.roleId },
     {
       $set: {
