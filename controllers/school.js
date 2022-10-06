@@ -2,7 +2,7 @@ const School = require("../model/schoolData");
 const { validationResult } = require("express-validator");
 const httpCodes = require("../constant/status");
 
-exports.createSchool = (req, res, next) => {
+exports.createSchool = async (req, res, next) => {
   // Validate request {params | query | body}
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -24,7 +24,7 @@ exports.createSchool = (req, res, next) => {
     createdBy: req.user._doc._id,
     updatedBy: req.user._doc._id,
   });
-  return school
+  return await school
     .save()
     .then((createSchool) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
@@ -40,8 +40,8 @@ exports.createSchool = (req, res, next) => {
     });
 };
 
-exports.getSchools = (req, res, next) => {
-  School.find()
+exports.getSchools = async (req, res, next) => {
+  await School.find()
     .populate("createdBy")
     .populate("updatedBy")
     .then((schools) => {
@@ -58,8 +58,8 @@ exports.getSchools = (req, res, next) => {
     });
 };
 
-exports.getSchoolById = (req, res, next) => {
-  School.findById(req.params.schoolId)
+exports.getSchoolById = async (req, res, next) => {
+  await School.findById(req.params.schoolId)
     .populate("user")
     .populate("city")
     .populate("state")
@@ -81,8 +81,8 @@ exports.getSchoolById = (req, res, next) => {
     });
 };
 
-exports.updateSchool = (req, res, next) => {
-  School.findOneAndUpdate(
+exports.updateSchool = async (req, res, next) => {
+  await School.findOneAndUpdate(
     ({ __id: req.params.schoolId },
     {
       $set: {
@@ -104,8 +104,8 @@ exports.updateSchool = (req, res, next) => {
     });
 };
 
-exports.deleteSchoolById = (req, res, next) => {
-  School.deleteOne({ __id: req.params.schoolId })
+exports.deleteSchoolById = async (req, res, next) => {
+  await School.deleteOne({ __id: req.params.schoolId })
     .then((schoolDeleted) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,
@@ -120,8 +120,8 @@ exports.deleteSchoolById = (req, res, next) => {
     });
 };
 
-exports.schoolActivation = (req, res, next) => {
-  School.findOneAndUpdate(
+exports.schoolActivation = async (req, res, next) => {
+  await School.findOneAndUpdate(
     { __id: req.params.schoolId },
     {
       $set: {

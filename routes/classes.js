@@ -13,6 +13,9 @@ router.post(
   "/",
   middleware.authMiddleware,
   body("name").isLength({ min: 1 }).withMessage("Class name must not be empty"),
+  body("classTeacher")
+    .isLength({ min: 1 })
+    .withMessage("Class teacher must not be empty"),
   classController.createClass
 );
 
@@ -38,6 +41,9 @@ router.get("/:classId", classController.getClassById);
 router.put(
   "/:classId",
   body("name").isLength({ min: 1 }).withMessage("Class name must not be empty"),
+  body("classTeacher")
+    .isLength({ min: 1 })
+    .withMessage("Class teacher must not be empty"),
   classController.updateClass
 );
 

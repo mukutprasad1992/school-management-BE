@@ -11,10 +11,66 @@ var stateRouter = require("./routes/states");
 var cityRouter = require("./routes/cities");
 var schoolRouter = require("./routes/schools");
 var classRouter = require("./routes/classes");
+var subjectRouter = require("./routes/subjects");
+var periodRouter = require("./routes/periods");
+var classStudentRouter = require("./routes/classesStudents");
+var attendanceRouter = require("./routes/attendances");
+const passport = require("passport");
+const cookieSession = require("cookie-session");
+require("./middleware/passport");
+// var Email = require("./utils/sendEmail");
+// let mailDetails = {
+//   from: "amanm4345@gmail.com",
+//   to: "amanm3033@gmail.com",
+//   subject: "Test mail",
+//   text: "Node.js testing mail",
+// };
+// Email.sendEmail(mailDetails);
 
 require("./config/db_config");
 
+
+//Google signin start
 var app = express();
+app.use(
+  cookieSession({
+    name: "google-auth-session",
+    keys: ["key1", "key2"],
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.get("/auth-page", (req, res) => {
+  res.send("<button><a href='/auth'>Login With Google</a></button>");
+});
+
+// Auth
+app.get(
+  "/auth",
+  passport.authenticate("google", { scope: ["email", "profile"] })
+);
+
+// Auth Callback
+app.get(
+  "/auth/callback",
+  passport.authenticate("google", {
+    successRedirect: "/auth/callback/success",
+    failureRedirect: "/auth/callback/failure",
+  })
+);
+
+// Success
+app.get("/auth/callback/success", (req, res) => {
+  if (!req.user) res.redirect("/auth/callback/failure");
+  res.send("Welcome " + req.user.email);
+});
+
+// failure
+app.get("/auth/callback/failure", (req, res) => {
+  res.send("Error");
+});
+//Google signin end
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
@@ -34,6 +90,10 @@ app.use("/cities", cityRouter);
 app.use("/states", stateRouter);
 app.use("/schools", schoolRouter);
 app.use("/classes", classRouter);
+app.use("/subjects", subjectRouter);
+app.use("/periods", periodRouter);
+app.use("/classesStudents", classStudentRouter);
+app.use("/attendances", attendanceRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

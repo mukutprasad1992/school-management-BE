@@ -2,7 +2,7 @@ const Country = require("../model/countryData");
 const { validationResult } = require("express-validator");
 const httpCodes = require("../constant/status");
 
-exports.createCountry = (req, res, next) => {
+exports.createCountry = async (req, res, next) => {
   // Validate request {params | query | body}
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -13,9 +13,8 @@ exports.createCountry = (req, res, next) => {
   // End validation
   var country = new Country({
     name: req.body.name,
-    // countryId: req.body.countryId,
   });
-  return country
+  return await country
     .save()
     .then((createCountry) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
@@ -34,7 +33,7 @@ exports.createCountry = (req, res, next) => {
 exports.getcountries = (req, res, next) => {
   Country.find()
     .then((countries) => {
-      console.info("countries", countries);
+      // console.info("countries", countries);
       res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,
         result: countries,

@@ -1,8 +1,8 @@
-const City = require("../model/cityData");
+const Period = require("../model/periodData");
 const { validationResult } = require("express-validator");
 const httpCodes = require("../constant/status");
 
-exports.createCity = async (req, res, next) => {
+exports.createPeriod = async (req, res, next) => {
   // Validate request {params | query | body}
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -11,17 +11,20 @@ exports.createCity = async (req, res, next) => {
       .json({ status: false, result: errors.array() });
   }
   // End validation
-  var city = new City({
-    name: req.body.name,
-    stateId: req.body.stateId,
-    countryId: req.body.countryId,
+  var periods = new Period({
+    period: req.body.period,
+    class: req.body.class,
+    teacher: req.body.teacher,
+    subject: req.body.subject,
+    createdBy: req.user._doc._id,
+    updatedBy: req.user._doc._id,
   });
-  return await city
+  return await periods
     .save()
-    .then((createCity) => {
+    .then((createPeriod) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,
-        result: createCity,
+        result: createPeriod,
       });
     })
     .catch((error) => {
@@ -32,15 +35,17 @@ exports.createCity = async (req, res, next) => {
     });
 };
 
-exports.getCities = async (req, res, next) => {
-  await City.find()
-    .populate("countryId")
-    .populate("stateId")
-    .then((cities) => {
-      console.info("cities", cities);
+exports.getPeriods = async (req, res, next) => {
+  await Period.find()
+    .populate("class")
+    .populate("subject")
+    .populate("teacher")
+    .populate("createdBy")
+    .populate("updatedBy")
+    .then((periods) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,
-        result: cities,
+        result: periods,
       });
     })
     .catch((error) => {
@@ -51,14 +56,17 @@ exports.getCities = async (req, res, next) => {
     });
 };
 
-exports.getCityById = async (req, res, next) => {
-  await City.findById(req.params.cityId)
-    .populate("countryId")
-    .populate("stateId")
-    .then((getCity) => {
+exports.getPeriodById = async (req, res, next) => {
+  await Period.findById(req.params.periodId)
+    .populate("class")
+    .populate("subject")
+    .populate("teacher")
+    .populate("createdBy")
+    .populate("updatedBy")
+    .then((getperiod) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,
-        result: getCity,
+        result: getperiod,
       });
     })
     .catch((error) => {
@@ -69,21 +77,22 @@ exports.getCityById = async (req, res, next) => {
     });
 };
 
-exports.updateCity = async (req, res, next) => {
-  await City.findOneAndUpdate(
-    ({ __id: req.params.cityId },
+exports.updatePeriod = async (req, res, next) => {
+  await Period.findOneAndUpdate(
+    ({ __id: req.params.periodId },
     {
       $set: {
-        name: req.body.name,
-        stateId: req.body.stateId,
-        countryId: req.body.countryId,
+        period: req.body.period,
+        class: req.body.class,
+        subject: req.body.subject,
+        teacher: req.body.teacher,
       },
     })
   )
-    .then((cityUpdate) => {
+    .then((periodUpdate) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,
-        result: cityUpdate,
+        result: periodUpdate,
       });
     })
     .catch((error) => {
@@ -94,12 +103,12 @@ exports.updateCity = async (req, res, next) => {
     });
 };
 
-exports.deleteCityById = async (req, res, next) => {
-  await City.deleteOne({ __id: req.params.cityId })
-    .then((cityDeleted) => {
+exports.deletePeriodById = async (req, res, next) => {
+  await Period.deleteOne({ __id: req.params.periodId })
+    .then((periodDeleted) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,
-        result: cityDeleted,
+        result: periodDeleted,
       });
     })
     .catch((error) => {

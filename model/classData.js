@@ -2,8 +2,12 @@ var mongoose = require("mongoose");
 
 classSchema = mongoose.Schema(
   {
-    user: { type: mongoose.Schema.ObjectId, ref: "users", required: true },
     name: { type: String, required: true },
+    classTeacher: {
+      type: mongoose.Schema.ObjectId,
+      ref: "users",
+      required: true,
+    },
     school: { type: mongoose.Schema.ObjectId, ref: "schools", required: true },
     createdBy: { type: mongoose.Schema.ObjectId, ref: "users", required: true },
     updatedBy: { type: mongoose.Schema.ObjectId, ref: "users", required: true },
@@ -12,7 +16,7 @@ classSchema = mongoose.Schema(
       enum: ["INITIATED", "INPROGRESS", "ACTIVATED"],
       default: "INITIATED",
     },
-  },
+  },   
   { timestamps: true }
 );
 

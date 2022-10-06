@@ -1,8 +1,8 @@
-const City = require("../model/cityData");
+const Attendance = require("../model/attendanceData");
 const { validationResult } = require("express-validator");
 const httpCodes = require("../constant/status");
 
-exports.createCity = async (req, res, next) => {
+exports.createAttendance = async (req, res, next) => {
   // Validate request {params | query | body}
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -11,17 +11,20 @@ exports.createCity = async (req, res, next) => {
       .json({ status: false, result: errors.array() });
   }
   // End validation
-  var city = new City({
-    name: req.body.name,
-    stateId: req.body.stateId,
-    countryId: req.body.countryId,
+  const attendance = new Attendance({
+    class: req.body.class,
+    dateOfAttendance: req.body.dateOfAttendance,
+    students: req.body.students,
+    rollNo: req.body.rollNo,
+    createdBy: req.user._doc._id,
+    updatedBy: req.user._doc._id,
   });
-  return await city
+  return await attendance
     .save()
-    .then((createCity) => {
+    .then((attendance) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,
-        result: createCity,
+        result: attendance,
       });
     })
     .catch((error) => {
@@ -32,15 +35,16 @@ exports.createCity = async (req, res, next) => {
     });
 };
 
-exports.getCities = async (req, res, next) => {
-  await City.find()
-    .populate("countryId")
-    .populate("stateId")
-    .then((cities) => {
-      console.info("cities", cities);
+exports.getAttendance = async (req, res, next) => {
+  await Attendance.find()
+    .populate("class")
+    .populate("students.student")
+    .populate("createdBy")
+    .populate("updatedBy")
+    .then((attendance) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,
-        result: cities,
+        result: attendance,
       });
     })
     .catch((error) => {
@@ -51,14 +55,16 @@ exports.getCities = async (req, res, next) => {
     });
 };
 
-exports.getCityById = async (req, res, next) => {
-  await City.findById(req.params.cityId)
-    .populate("countryId")
-    .populate("stateId")
-    .then((getCity) => {
+exports.getAttendanceById = async (req, res, next) => {
+  await Attendance.findById(req.params.attendanceId)
+    .populate("class")
+    .populate("students.student")
+    .populate("createdBy")
+    .populate("updatedBy")
+    .then((getAttendance) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,
-        result: getCity,
+        result: getAttendance,
       });
     })
     .catch((error) => {
@@ -69,21 +75,22 @@ exports.getCityById = async (req, res, next) => {
     });
 };
 
-exports.updateCity = async (req, res, next) => {
-  await City.findOneAndUpdate(
-    ({ __id: req.params.cityId },
+exports.updateAttendanceById = async (req, res, next) => {
+  await Attendance.findOneAndUpdate(
+    ({ __id: req.params.attendanceId },
     {
       $set: {
-        name: req.body.name,
-        stateId: req.body.stateId,
-        countryId: req.body.countryId,
+        class: req.body.class,
+        dateOfAttendance: req.body.dateOfAttendance,
+        students: req.body.students,
+        rollNo: req.body.rollNo,
       },
     })
   )
-    .then((cityUpdate) => {
+    .then((attendanceUpdate) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,
-        result: cityUpdate,
+        result: attendanceUpdate,
       });
     })
     .catch((error) => {
@@ -94,12 +101,12 @@ exports.updateCity = async (req, res, next) => {
     });
 };
 
-exports.deleteCityById = async (req, res, next) => {
-  await City.deleteOne({ __id: req.params.cityId })
-    .then((cityDeleted) => {
+exports.deleteAttandance = async (req, res, next) => {
+  await Attendance.deleteOne({ __id: req.params.attendanceId })
+    .then((attendanceDeleted) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,
-        result: cityDeleted,
+        result: attendanceDeleted,
       });
     })
     .catch((error) => {

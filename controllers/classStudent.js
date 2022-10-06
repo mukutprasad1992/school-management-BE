@@ -1,8 +1,8 @@
-const City = require("../model/cityData");
+const ClassStudent = require("../model/classStudentData");
 const { validationResult } = require("express-validator");
 const httpCodes = require("../constant/status");
 
-exports.createCity = async (req, res, next) => {
+exports.createClassStudent = async (req, res, next) => {
   // Validate request {params | query | body}
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -11,17 +11,19 @@ exports.createCity = async (req, res, next) => {
       .json({ status: false, result: errors.array() });
   }
   // End validation
-  var city = new City({
-    name: req.body.name,
-    stateId: req.body.stateId,
-    countryId: req.body.countryId,
+  var classesStudents = new ClassStudent({
+    class: req.body.class,
+    student: req.body.student,
+    rollNo: req.body.rollNo,
+    createdBy: req.user._doc._id,
+    updatedBy: req.user._doc._id,
   });
-  return await city
+  return await classesStudents
     .save()
-    .then((createCity) => {
+    .then((createClassStudent) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,
-        result: createCity,
+        result: createClassStudent,
       });
     })
     .catch((error) => {
@@ -32,15 +34,17 @@ exports.createCity = async (req, res, next) => {
     });
 };
 
-exports.getCities = async (req, res, next) => {
-  await City.find()
-    .populate("countryId")
-    .populate("stateId")
-    .then((cities) => {
-      console.info("cities", cities);
+exports.getClassesStudents = async (req, res, next) => {
+  await ClassStudent.find()
+    .populate("class")
+    .populate("student")
+    .populate("rollNo")
+    .populate("createdBy")
+    .populate("updatedBy")
+    .then((classesStudents) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,
-        result: cities,
+        result: classesStudents,
       });
     })
     .catch((error) => {
@@ -51,14 +55,17 @@ exports.getCities = async (req, res, next) => {
     });
 };
 
-exports.getCityById = async (req, res, next) => {
-  await City.findById(req.params.cityId)
-    .populate("countryId")
-    .populate("stateId")
-    .then((getCity) => {
+exports.getClassesStudentsById = async (req, res, next) => {
+  await ClassStudent.findById(req.params.classStudentId)
+    .populate("class")
+    .populate("student")
+    .populate("rollNo")
+    .populate("createdBy")
+    .populate("updatedBy")
+    .then((getClassStudent) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,
-        result: getCity,
+        result: getClassStudent,
       });
     })
     .catch((error) => {
@@ -69,21 +76,21 @@ exports.getCityById = async (req, res, next) => {
     });
 };
 
-exports.updateCity = async (req, res, next) => {
-  await City.findOneAndUpdate(
-    ({ __id: req.params.cityId },
+exports.updateClassstudentById = async (req, res, next) => {
+  await ClassStudent.findOneAndUpdate(
+    ({ __id: req.params.classStudentId },
     {
       $set: {
-        name: req.body.name,
-        stateId: req.body.stateId,
-        countryId: req.body.countryId,
+        class: req.body.class,
+        student: req.body.student,
+        rollNo: req.body.rollNo,
       },
     })
   )
-    .then((cityUpdate) => {
+    .then((classStudentUpdate) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,
-        result: cityUpdate,
+        result: classStudentUpdate,
       });
     })
     .catch((error) => {
@@ -94,12 +101,12 @@ exports.updateCity = async (req, res, next) => {
     });
 };
 
-exports.deleteCityById = async (req, res, next) => {
-  await City.deleteOne({ __id: req.params.cityId })
-    .then((cityDeleted) => {
+exports.deleteClassesStudentsById = async (req, res, next) => {
+  await ClassStudent.deleteOne({ __id: req.params.classStudentId })
+    .then((classStudentDeleted) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,
-        result: cityDeleted,
+        result: classStudentDeleted,
       });
     })
     .catch((error) => {
