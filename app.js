@@ -2,6 +2,7 @@ var express = require("express");
 var cookieParser = require("cookie-parser");
 var path = require("path");
 var logger = require("morgan");
+var cors = require("cors");
 require("dotenv").config();
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
@@ -32,6 +33,8 @@ require("./config/db_config");
 
 //Google signin start
 var app = express();
+
+app.use(cors());
 
 app.get("/dashboard", (req, res) => {
   res.send({ Test: "Check" });
