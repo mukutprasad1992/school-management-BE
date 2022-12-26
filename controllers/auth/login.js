@@ -22,7 +22,6 @@ exports.loginUser = async (req, res, next) => {
               result: error,
             });
           } else if (result) {
-            // console.log(user);
             if (user.status !== "ACTIVATED") {
               res.status(httpCodes.statusCodes.passwordDoesNotMatch).json({
                 status: false,
@@ -38,7 +37,7 @@ exports.loginUser = async (req, res, next) => {
               );
               res.status(httpCodes.statusCodes.successStatusCode).json({
                 status: true,
-                token,
+                userDetails: { token, user },
               });
             }
           } else {
