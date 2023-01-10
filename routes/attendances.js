@@ -27,14 +27,18 @@ router.post(
  * @description Getting all classes-Students
  * @date 04-10-2022
  */
-router.get("/", attendanceController.getAttendance);
+router.get("/", middleware.authMiddleware, attendanceController.getAttendance);
 
 /**
  * @author Aman
  * @description Getting attendance by id
  * @date 04-10-2022
  */
-router.get("/:attendanceId", attendanceController.getAttendanceById);
+router.get(
+  "/:attendanceId",
+  middleware.authMiddleware,
+  attendanceController.getAttendanceById
+);
 
 /**
  * @author Aman
@@ -43,6 +47,7 @@ router.get("/:attendanceId", attendanceController.getAttendanceById);
  */
 router.put(
   "/:attendanceId",
+  middleware.authMiddleware,
   body("class").isLength({ min: 1 }).withMessage("Class must not be empty"),
   body("dateOfAttendance")
     .isLength({ min: 1 })
@@ -58,5 +63,10 @@ router.put(
  * @description Deleting attendance by id
  * @date 23-09-2022
  */
-router.delete("/:attendanceId", attendanceController.deleteAttandance);
+router.delete(
+  "/:attendanceId",
+  middleware.authMiddleware,
+  attendanceController.deleteAttandance
+);
+
 module.exports = router;

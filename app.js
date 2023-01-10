@@ -16,6 +16,7 @@ var subjectRouter = require("./routes/subjects");
 var periodRouter = require("./routes/periods");
 var classStudentRouter = require("./routes/classesStudents");
 var attendanceRouter = require("./routes/attendances");
+var leaveRouter = require("./routes/leaves");
 var googleRouter = require("./routes/google");
 const passport = require("passport");
 const cookieSession = require("cookie-session");
@@ -72,6 +73,7 @@ app.use("/periods", periodRouter);
 app.use("/classesStudents", classStudentRouter);
 app.use("/attendances", attendanceRouter);
 app.use("/google", googleRouter);
+app.use("/leaves", leaveRouter);
 
 // error handler
 app.use(function (err, req, res, next) {
