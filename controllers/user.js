@@ -87,6 +87,9 @@ exports.profilePicUpload = async (req, res, next) => {
       $set: {
         profilePic: req.file.key,
       },
+    },
+    {
+      upsert: true,
     })
   )
     .then((profilePicUpdate) => {
