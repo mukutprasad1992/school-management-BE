@@ -62,7 +62,7 @@ exports.updatedUser = async (req, res, next) => {
         lastName: req.body.lastName,
         email: req.body.email,
         mobileNumber: req.body.mobileNumber,
-        roleId: req.body.roleId,
+        role: req.body.roleId,
       },
     })
   )
