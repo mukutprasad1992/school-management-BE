@@ -15,13 +15,14 @@ schoolSchema = mongoose.Schema(
     city: { type: mongoose.Schema.ObjectId, ref: "cities", required: true },
     address: { type: String, required: true },
     pinCode: { type: String, required: true },
-    createdBy: { type: mongoose.Schema.ObjectId, ref: "users", required: true },
-    updatedBy: { type: mongoose.Schema.ObjectId, ref: "users", required: true },
+    schoolLogo: { type: String },
     status: {
       type: String,
       enum: ["INITIATED", "INPROGRESS", "ACTIVATED"],
       default: "INITIATED",
     },
+    createdBy: { type: mongoose.Schema.ObjectId, ref: "users", required: true },
+    updatedBy: { type: mongoose.Schema.ObjectId, ref: "users", required: true },
   },
   { timestamps: true }
 );

@@ -1,6 +1,7 @@
 const School = require("../model/schoolData");
 const { validationResult } = require("express-validator");
 const httpCodes = require("../constant/status");
+const mongoose = require("mongoose");
 
 exports.createSchool = async (req, res, next) => {
   // Validate request {params | query | body}
@@ -83,7 +84,7 @@ exports.getSchoolById = async (req, res, next) => {
 
 exports.updateSchool = async (req, res, next) => {
   await School.findOneAndUpdate(
-    ({ __id: req.params.schoolId },
+    ({ _id: req.params.schoolId },
     {
       $set: {
         name: req.body.name,
@@ -133,6 +134,34 @@ exports.schoolActivation = async (req, res, next) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,
         result: activationUpdate,
+      });
+    })
+    .catch((error) => {
+      res.status(httpCodes.statusCodes.internalServerErrorCode).json({
+        status: false,
+        result: error,
+      });
+    });
+};
+
+exports.schoolLogoUpload = async (req, res, next) => {
+  School.findOneAndUpdate(
+    { _id: req.body.schoolId },
+    {
+      $set: {
+        schoolLogo: req.file.key,
+      },
+    },
+    {
+      new: true,
+      upsert: true,
+    }
+  )
+    .then((schoolLogoUpdate) => {
+      console.info("schoolLogoUpdate", schoolLogoUpdate);
+      res.status(httpCodes.statusCodes.successStatusCode).json({
+        status: true,
+        result: schoolLogoUpdate,
       });
     })
     .catch((error) => {

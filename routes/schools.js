@@ -3,6 +3,7 @@ const express = require("express");
 const router = express.Router();
 const middleware = require("../middleware/auth");
 const schoolController = require("../controllers/school");
+const multerFileUpload = require("../utils/multer");
 
 /**
  * @author Aman
@@ -70,10 +71,22 @@ router.delete("/:schoolId", schoolController.deleteSchoolById);
  * @description school activation
  * @date 27-09-2022
  */
- router.put(
+router.put(
   "/school-activation/:schoolId",
   middleware.authMiddleware,
   schoolController.schoolActivation
+);
+
+/**
+ * @author Aman
+ * @description Uploading school logo & add validation
+ * @date 18-01-2023
+ */
+router.post(
+  "/school-logo-upload",
+  multerFileUpload.upload.single("schoolLogo"),
+  middleware.authMiddleware,
+  schoolController.schoolLogoUpload
 );
 
 module.exports = router;

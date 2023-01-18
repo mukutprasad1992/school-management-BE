@@ -81,8 +81,8 @@ exports.updatedUser = async (req, res, next) => {
 };
 
 exports.profilePicUpload = async (req, res, next) => {
-  await User.findOneAndUpdate(
-    ({ __id: req.user._doc._id },
+  User.updateOne(
+    { _id: req.user._doc._id },
     {
       $set: {
         profilePic: req.file.key,
@@ -90,7 +90,8 @@ exports.profilePicUpload = async (req, res, next) => {
     },
     {
       upsert: true,
-    })
+      new: true,
+    }
   )
     .then((profilePicUpdate) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({

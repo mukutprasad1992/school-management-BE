@@ -84,7 +84,7 @@ router.post(
 
 /**
  * @author Aman
- * @description Uploading profile pic & add validation
+ * @description Reset password
  * @date 20-09-2022
  */
 router.post(
