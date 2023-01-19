@@ -81,7 +81,7 @@ exports.updatedUser = async (req, res, next) => {
 };
 
 exports.profilePicUpload = async (req, res, next) => {
-  User.updateOne(
+  User.findOneAndUpdate(
     { _id: req.user._doc._id },
     {
       $set: {
