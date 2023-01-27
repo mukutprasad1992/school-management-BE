@@ -2,7 +2,6 @@ var mongoose = require("mongoose");
 
 schoolSchema = mongoose.Schema(
   {
-    user: { type: mongoose.Schema.ObjectId, ref: "users", required: true },
     name: { type: String, required: true },
     email: { type: String, required: true },
     phoneNumber: { type: Number, required: true },
@@ -15,7 +14,7 @@ schoolSchema = mongoose.Schema(
     city: { type: mongoose.Schema.ObjectId, ref: "cities", required: true },
     address: { type: String, required: true },
     pinCode: { type: String, required: true },
-    schoolLogo: { type: String },
+    schoolLogo: { type: String, required: false },
     status: {
       type: String,
       enum: ["INITIATED", "INPROGRESS", "ACTIVATED"],

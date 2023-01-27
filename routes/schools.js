@@ -89,4 +89,15 @@ router.post(
   schoolController.schoolLogoUpload
 );
 
+/**
+ * @author Aman
+ * @description Getting school by user Iid
+ * @date 23-01-2023
+ */
+router.get(
+  "/getSchoolByUserId/:userId",
+  middleware.authMiddleware,
+  schoolController.getSchoolByUserId
+);
+
 module.exports = router;

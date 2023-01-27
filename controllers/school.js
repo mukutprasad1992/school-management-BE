@@ -1,6 +1,7 @@
 const School = require("../model/schoolData");
 const { validationResult } = require("express-validator");
 const httpCodes = require("../constant/status");
+const messages = require("../constant/messages");
 const mongoose = require("mongoose");
 
 exports.createSchool = async (req, res, next) => {
@@ -12,8 +13,15 @@ exports.createSchool = async (req, res, next) => {
       .json({ status: false, result: errors.array() });
   }
   // End validation
+  const getSchoolOnUserId = await School.find({ createdBy: req.user._doc._id });
+  // console.log(getUserOnEmail);
+  if (getSchoolOnUserId && getSchoolOnUserId.length) {
+    res.status(httpCodes.statusCodes.badRequest).json({
+      status: false,
+      result: messages.errorMessages.schoolAlreadyCreatd,
+    });
+  }
   var school = new School({
-    user: req.user._doc._id,
     name: req.body.name,
     email: req.body.email,
     phoneNumber: req.body.phoneNumber,
@@ -22,6 +30,7 @@ exports.createSchool = async (req, res, next) => {
     city: req.body.city,
     address: req.body.address,
     pinCode: req.body.pinCode,
+    schoolLogo: "",
     createdBy: req.user._doc._id,
     updatedBy: req.user._doc._id,
   });
@@ -162,6 +171,28 @@ exports.schoolLogoUpload = async (req, res, next) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,
         result: schoolLogoUpdate,
+      });
+    })
+    .catch((error) => {
+      res.status(httpCodes.statusCodes.internalServerErrorCode).json({
+        status: false,
+        result: error,
+      });
+    });
+};
+
+exports.getSchoolByUserId = async (req, res, next) => {
+  console.info("req.params.userId", req.params.userId);
+  await School.findOne({ createdBy: req.params.userId })
+    .populate("city")
+    .populate("state")
+    .populate("country")
+    .populate("createdBy")
+    .populate("updatedBy")
+    .then((getSchool) => {
+      res.status(httpCodes.statusCodes.successStatusCode).json({
+        status: true,
+        result: getSchool,
       });
     })
     .catch((error) => {

@@ -4,5 +4,7 @@ exports.errorMessages = {
   wrongPassword: "Password incorrect. Pleasa enter correct password",
   passwordNotMatch: "New Password and confirmNewpassword not matched",
   emailAlreadyExists: "Email id already exists. Please use another email id",
-  userNotActivated: "You are not activated. Please contact to admin for activation"
+  userNotActivated:
+    "You are not activated. Please contact to admin for activation",
+  schoolAlreadyCreatd: "School already created by this user",
 };
