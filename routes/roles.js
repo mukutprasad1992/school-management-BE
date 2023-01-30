@@ -51,6 +51,6 @@ router.get("/:roleId", middleware.authMiddleware, roleController.getroleById);
  * @description Getting all roles
  * @date 09-09-2022
  */
-router.get("/", middleware.authMiddleware, roleController.getroles);
+router.get("/", roleController.getroles);
 
 module.exports = router;
