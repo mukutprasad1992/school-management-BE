@@ -41,7 +41,11 @@ router.get("/", middleware.authMiddleware, userController.getUserById);
  * @description Getting all registerd users data
  * @date 09-09-2022
  */
-router.get("/all-users", middleware.authMiddleware, userController.getUsers);
+router.get(
+  "/all-users/:roleId",
+  middleware.authMiddleware,
+  userController.getUsers
+);
 
 /**
  * @author Aman

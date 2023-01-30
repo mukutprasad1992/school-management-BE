@@ -15,7 +15,6 @@ exports.loginUser = async (req, res, next) => {
         });
       } else {
         bcrypt.compare(req.body.password, user.password, (error, result) => {
-          console.log(req.body.password, result);
           if (error) {
             res.status(httpCodes.statusCodes.passwordDoesNotMatch).json({
               status: false,

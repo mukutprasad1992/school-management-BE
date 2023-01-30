@@ -1,11 +1,28 @@
 var bcrypt = require("bcrypt");
 const User = require("../model/userData");
+const Role = require("../model/roleData");
 const messages = require("../constant/messages");
 const httpCodes = require("../constant/status");
+const defaultPagination = require("../constant/pagination ");
 
 exports.getUsers = async (req, res, next) => {
-  await User.find()
+  const { roleId } = req.params;
+  //add validation
+  const getRole = await Role.findOne({ _id: roleId });
+  if (!getRole) {
+    return res
+      .status(httpCodes.statusCodes.badRequest)
+      .json({ status: false, result: "Please enter valid role ID" });
+  }
+  //add pagination
+  const {
+    page = defaultPagination.pagination.page,
+    limit = defaultPagination.pagination.limit,
+  } = req.query;
+  await User.find({ role: roleId })
     .populate("role")
+    .limit(limit * 1)
+    .skip((page - 1) * limit)
     .then((users) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,
@@ -117,7 +134,6 @@ exports.resetPassword = async (req, res, next) => {
         return { status: false, result: error };
       }
       if (req.body.newPassword === req.body.confirmNewPassword) {
-        console.info("req.body.newPassword", req.body.newPassword);
         bcrypt.hash(req.body.newPassword, 10, (error, hash) => {
           if (error) {
             return res
@@ -154,7 +170,6 @@ exports.resetPassword = async (req, res, next) => {
           result: messages.errorMessages.passwordNotMatch,
         };
       }
-      console.log(result);
     }
   );
 };

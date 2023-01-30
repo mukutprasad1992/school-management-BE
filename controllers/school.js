@@ -14,7 +14,6 @@ exports.createSchool = async (req, res, next) => {
   }
   // End validation
   const getSchoolOnUserId = await School.find({ createdBy: req.user._doc._id });
-  // console.log(getUserOnEmail);
   if (getSchoolOnUserId && getSchoolOnUserId.length) {
     res.status(httpCodes.statusCodes.badRequest).json({
       status: false,
