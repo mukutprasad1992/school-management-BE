@@ -164,12 +164,12 @@ exports.userActivation = async (req, res, next) => {
     { _id: req.params.userId },
     {
       $set: {
-        status: "ACTIVATED",
+        status: req.body.status,
       },
-    }
+    },
+    { new: true }
   )
     .then((activationUpdate) => {
-      console.log(activationUpdate);
       res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,
         result: activationUpdate,
