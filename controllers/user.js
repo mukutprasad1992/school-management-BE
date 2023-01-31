@@ -3,7 +3,6 @@ const User = require("../model/userData");
 const Role = require("../model/roleData");
 const messages = require("../constant/messages");
 const httpCodes = require("../constant/status");
-const defaultPagination = require("../constant/pagination ");
 
 exports.getUsers = async (req, res, next) => {
   const { roleId } = req.params;
@@ -14,15 +13,8 @@ exports.getUsers = async (req, res, next) => {
       .status(httpCodes.statusCodes.badRequest)
       .json({ status: false, result: "Please enter valid role ID" });
   }
-  //add pagination
-  const {
-    page = defaultPagination.pagination.page,
-    limit = defaultPagination.pagination.limit,
-  } = req.query;
   await User.find({ role: roleId })
     .populate("role")
-    .limit(limit * 1)
-    .skip((page - 1) * limit)
     .then((users) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,
