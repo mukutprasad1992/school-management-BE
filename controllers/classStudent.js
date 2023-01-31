@@ -37,7 +37,6 @@ exports.getClassesStudents = async (req, res, next) => {
   await ClassStudent.find()
     .populate("class")
     .populate("student")
-    .populate("rollNo")
     .populate("createdBy")
     .populate("updatedBy")
     .then((classesStudents) => {
@@ -58,7 +57,6 @@ exports.getClassesStudentsById = async (req, res, next) => {
   await ClassStudent.findById(req.params.classStudentId)
     .populate("class")
     .populate("student")
-    .populate("rollNo")
     .populate("createdBy")
     .populate("updatedBy")
     .then((getClassStudent) => {
@@ -82,7 +80,6 @@ exports.updateClassstudentById = async (req, res, next) => {
       $set: {
         class: req.body.class,
         student: req.body.student,
-        rollNo: req.body.rollNo,
       },
     })
   )
