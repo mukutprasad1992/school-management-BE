@@ -14,7 +14,6 @@ exports.createClassStudent = async (req, res, next) => {
   var classesStudents = new ClassStudent({
     class: req.body.class,
     student: req.body.student,
-    rollNo: req.body.rollNo,
     createdBy: req.user._doc._id,
     updatedBy: req.user._doc._id,
   });

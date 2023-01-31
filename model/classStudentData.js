@@ -4,7 +4,6 @@ classStudentSchema = mongoose.Schema(
   {
     class: { type: mongoose.Schema.ObjectId, ref: "classes", required: true },
     student: { type: mongoose.Schema.ObjectId, ref: "users", required: true },
-    rollNo: { type: Number, required: true },
     createdBy: { type: mongoose.Schema.ObjectId, ref: "users", required: true },
     updatedBy: { type: mongoose.Schema.ObjectId, ref: "users", required: true },
   },

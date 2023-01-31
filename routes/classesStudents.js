@@ -14,7 +14,6 @@ router.post(
   middleware.authMiddleware,
   body("class").isLength({ min: 1 }).withMessage("Class must not be empty"),
   body("student").isLength({ min: 1 }).withMessage("student must not be empty"),
-  body("rollNo").isLength({ min: 1 }).withMessage("Roll number not be empty"),
   classStudentController.createClassStudent
 );
 

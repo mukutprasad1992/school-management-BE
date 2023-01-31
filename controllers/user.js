@@ -3,6 +3,8 @@ const User = require("../model/userData");
 const Role = require("../model/roleData");
 const messages = require("../constant/messages");
 const httpCodes = require("../constant/status");
+const mailTransporter = require("../utils/sendEmail");
+const jwt = require("jsonwebtoken");
 
 exports.getUsers = async (req, res, next) => {
   const { roleId } = req.params;
@@ -188,4 +190,41 @@ exports.userActivation = async (req, res, next) => {
         result: error,
       });
     });
+};
+
+exports.getResetPasswordLink = async (req, res, next) => {
+  const { email } = req.body;
+  const getUser = await User.findOne({ email: email });
+  if (!getUser) return res.status(400).send({ message: "Email not found" });
+  const token = jwt.sign({ ...getUser }, `${process.env.JWT_SECRET_KEY}`, {
+    expiresIn: `${process.env.JWT_EXPIRE_TIME}`,
+  });
+  const resetPasswordLink = `http://localhost:4200/reset-password?token=${token}`;
+  const mailOptions = {
+    from: "amanm4345@gmail.com",
+    to: email,
+    subject: "Reset your password",
+    text: `Please click on the following link to reset your password: ${resetPasswordLink}`,
+  };
+  await mailTransporter.sendEmail(mailOptions);
+};
+
+exports.forgotPassword = async (req, res, next) => {
+  const { newPassword, confirmNewPassword } = req.body;
+  if (newPassword === confirmNewPassword) {
+    const hashedPassword = await bcrypt.hash(req.body.newPassword, 10);
+    const getUpdatedUserPassword = await User.updateOne(
+      { _id: req.user._doc._id },
+      {
+        $set: { password: hashedPassword },
+      },
+      { new: true }
+    );
+    res.status(httpCodes.statusCodes.successStatusCode).json({
+      status: true,
+      result: getUpdatedUserPassword,
+    });
+  } else {
+    throw new Error("New password and confirm new password does not match");
+  }
 };
