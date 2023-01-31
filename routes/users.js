@@ -108,4 +108,22 @@ router.put(
   userController.userActivation
 );
 
+/**
+ * @author Aman
+ * @description getting reset password link
+ * @date 31-01-2023
+ */
+router.post("/get-rest-password-link", userController.getResetPasswordLink);
+
+/**
+ * @author Aman
+ * @description forgot password
+ * @date 31-01-2023
+ */
+router.post(
+  "/forgot-password",
+  middleware.authMiddleware,
+  userController.forgotPassword
+);
+
 module.exports = router;
