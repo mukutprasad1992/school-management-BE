@@ -1,8 +1,8 @@
-const ClassStudent = require("../model/classStudentData");
+const ClassTeacher = require("../model/ClassTeacherData");
 const { validationResult } = require("express-validator");
 const httpCodes = require("../constant/status");
 
-exports.createClassStudent = async (req, res, next) => {
+exports.createClassTeacher = async (req, res, next) => {
   // Validate request {params | query | body}
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -11,19 +11,19 @@ exports.createClassStudent = async (req, res, next) => {
       .json({ status: false, result: errors.array() });
   }
   // End validation
-  var classesStudents = new ClassStudent({
+  var classesTeachers = new ClassTeacher({
     class: req.body.class,
-    student: req.body.student,
-    rollNo: req.body.rollNo,
+    teacher: req.body.teacher,
+    employeeId: req.body.employeeId,
     createdBy: req.user._doc._id,
     updatedBy: req.user._doc._id,
   });
-  return await classesStudents
+  return await classesTeachers
     .save()
-    .then((createClassStudent) => {
+    .then((createClassTeacher) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,
-        result: createClassStudent,
+        result: createClassTeacher,
       });
     })
     .catch((error) => {
@@ -34,17 +34,17 @@ exports.createClassStudent = async (req, res, next) => {
     });
 };
 
-exports.getClassesStudents = async (req, res, next) => {
-  await ClassStudent.find()
+exports.getClassesTeachers = async (req, res, next) => {
+  await ClassTeacher.find()
     .populate("class")
-    .populate("student")
-    .populate("rollNo")
+    .populate("teacher")
+    .populate("employeeId")
     .populate("createdBy")
     .populate("updatedBy")
-    .then((classesStudents) => {
+    .then((classesTeachers) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,
-        result: classesStudents,
+        result: classesTeachers,
       });
     })
     .catch((error) => {
@@ -55,17 +55,17 @@ exports.getClassesStudents = async (req, res, next) => {
     });
 };
 
-exports.getClassesStudentsById = async (req, res, next) => {
-  await ClassStudent.findById(req.params.classStudentId)
+exports.getClassesTeachersById = async (req, res, next) => {
+  await ClassTeacher.findById(req.params.classTeacherId)
     .populate("class")
-    .populate("student")
-    .populate("rollNo")
+    .populate("teacher")
+    .populate("employeeId")
     .populate("createdBy")
     .populate("updatedBy")
-    .then((getClassStudent) => {
+    .then((getClassTeacher) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,
-        result: getClassStudent,
+        result: getClassTeacher,
       });
     })
     .catch((error) => {
@@ -76,20 +76,21 @@ exports.getClassesStudentsById = async (req, res, next) => {
     });
 };
 
-exports.updateClassstudentById = async (req, res, next) => {
-  await ClassStudent.findOneAndUpdate(
-    ({ __id: req.params.classStudentId },
+exports.updateClassTeacherById = async (req, res, next) => {
+  await ClassTeacher.findOneAndUpdate(
+    ({ __id: req.params.classTeacherId },
     {
       $set: {
         class: req.body.class,
-        student: req.body.student,
+        teacher: req.body.teacher,
+        employeeId: req.body.employeeId,
       },
     })
   )
-    .then((classStudentUpdate) => {
+    .then((classTeacherUpdate) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,
-        result: classStudentUpdate,
+        result: classTeacherUpdate,
       });
     })
     .catch((error) => {
@@ -100,12 +101,12 @@ exports.updateClassstudentById = async (req, res, next) => {
     });
 };
 
-exports.deleteClassesStudentsById = async (req, res, next) => {
-  await ClassStudent.deleteOne({ __id: req.params.classStudentId })
-    .then((classStudentDeleted) => {
+exports.deleteClassesTeachersById = async (req, res, next) => {
+  await ClassTeacher.deleteOne({ __id: req.params.classTeacherId })
+    .then((classTeacherDeleted) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,
-        result: classStudentDeleted,
+        result: classTeacherDeleted,
       });
     })
     .catch((error) => {
