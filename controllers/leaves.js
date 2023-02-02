@@ -38,6 +38,7 @@ exports.createLeave = async (req, res, next) => {
 
 exports.getLeaves = async (req, res, next) => {
   await Leave.find()
+    .populate("tag")
     .then((leave) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,
