@@ -1,14 +1,27 @@
 const ClassStudent = require("../model/classStudentData");
 const { validationResult } = require("express-validator");
 const httpCodes = require("../constant/status");
+const messages = require("../constant/messages");
+var User = require("../model/userData");
 
 exports.createClassStudent = async (req, res, next) => {
   // Validate request {params | query | body}
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res
-      .status(httpCodes.statusCodes.badRequest)
-      .json({ status: false, result: errors.array() });
+  const getStudent = await User.findOne({
+    student: req.body.student,
+    class: req.body.class,
+  });
+  if (getStudent) {
+    res.status(httpCodes.statusCodes.badRequest).json({
+      status: false,
+      result: messages.errorMessages.studentAlreadyAssociate,
+    });
+  } else {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res
+        .status(httpCodes.statusCodes.badRequest)
+        .json({ status: false, result: errors.array() });
+    }
   }
   // End validation
   var classesStudents = new ClassStudent({

@@ -8,7 +8,6 @@ const httpCodes = require("../../constant/status");
 exports.createUser = async (req, res, next) => {
   // Validate request {params | query | body}
   const getUserOnEmail = await User.find({ email: req.body.email });
-  // console.log(getUserOnEmail);
   if (getUserOnEmail && getUserOnEmail.length) {
     res.status(httpCodes.statusCodes.badRequest).json({
       status: false,

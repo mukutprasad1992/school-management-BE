@@ -7,4 +7,5 @@ exports.errorMessages = {
   userNotActivated:
     "You are not activated. Please contact to admin for activation",
   schoolAlreadyCreatd: "School already created by this user",
+  studentAlreadyAssociate: "Student already associated with this class.",
 };
