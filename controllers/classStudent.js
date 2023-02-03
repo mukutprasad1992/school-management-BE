@@ -5,7 +5,6 @@ const messages = require("../constant/messages");
 var User = require("../model/userData");
 
 exports.createClassStudent = async (req, res, next) => {
-  // Validate request {params | query | body}
   const getStudent = await User.findOne({
     student: req.body.student,
     class: req.body.class,
@@ -16,35 +15,36 @@ exports.createClassStudent = async (req, res, next) => {
       result: messages.errorMessages.studentAlreadyAssociate,
     });
   } else {
+    // Validate request {params | query | body}
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res
-        .status(httpCodes.statusCodes.badRequest)
+        .status(httpCodes.statusCodes.conflictRequest)
         .json({ status: false, result: errors.array() });
     }
-  }
-  // End validation
-  var classesStudents = new ClassStudent({
-    class: req.body.class,
-    student: req.body.student,
-    rollNo: req.body.rollNo,
-    createdBy: req.user._doc._id,
-    updatedBy: req.user._doc._id,
-  });
-  return await classesStudents
-    .save()
-    .then((createClassStudent) => {
-      res.status(httpCodes.statusCodes.successStatusCode).json({
-        status: true,
-        result: createClassStudent,
-      });
-    })
-    .catch((error) => {
-      res.status(httpCodes.statusCodes.internalServerErrorCode).json({
-        status: false,
-        result: error,
-      });
+    // End validation
+    var classesStudents = new ClassStudent({
+      class: req.body.class,
+      student: req.body.student,
+      rollNo: req.body.rollNo,
+      createdBy: req.user._doc._id,
+      updatedBy: req.user._doc._id,
     });
+    return await classesStudents
+      .save()
+      .then((createClassStudent) => {
+        res.status(httpCodes.statusCodes.successStatusCode).json({
+          status: true,
+          result: createClassStudent,
+        });
+      })
+      .catch((error) => {
+        res.status(httpCodes.statusCodes.internalServerErrorCode).json({
+          status: false,
+          result: error,
+        });
+      });
+  }
 };
 
 exports.getClassesStudents = async (req, res, next) => {
