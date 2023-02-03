@@ -13,9 +13,6 @@ router.post(
   "/",
   middleware.authMiddleware,
   body("name").isLength({ min: 1 }).withMessage("Class name must not be empty"),
-  body("classTeacher")
-    .isLength({ min: 1 })
-    .withMessage("Class teacher must not be empty"),
   classController.createClass
 );
 
@@ -41,9 +38,6 @@ router.get("/:classId", classController.getClassById);
 router.put(
   "/:classId",
   body("name").isLength({ min: 1 }).withMessage("Class name must not be empty"),
-  body("classTeacher")
-    .isLength({ min: 1 })
-    .withMessage("Class teacher must not be empty"),
   classController.updateClass
 );
 
@@ -54,4 +48,9 @@ router.put(
  */
 router.delete("/:classId", classController.deleteClassById);
 
+router.put(
+  "/status/:classId",
+  body("status").isLength({ min: 1 }).withMessage("Staus must not be empty"),
+  classController.updateClassStatus
+);
 module.exports = router;

@@ -79,8 +79,8 @@ router.delete(
 
 /**
  * @author Aman
- * @description updating leaves
- * @date 10-01-2023
+ * @description updating leave status
+ * @date 03-02-2023
  */
 router.put(
   "/status/:leaveId",

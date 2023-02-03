@@ -13,7 +13,6 @@ exports.createClass = async (req, res, next) => {
   // End validation
   var classes = new Class({
     name: req.body.name,
-    classTeacher: req.body.classTeacher,
     school: req.body.school,
     createdBy: req.user._doc._id,
     updatedBy: req.user._doc._id,
@@ -100,6 +99,32 @@ exports.deleteClassById = async (req, res, next) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,
         result: classDeleted,
+      });
+    })
+    .catch((error) => {
+      res.status(httpCodes.statusCodes.internalServerErrorCode).json({
+        status: false,
+        result: error,
+      });
+    });
+};
+
+exports.updateClassStatus = async (req, res, next) => {
+  await Class.findOneAndUpdate(
+    { _id: req.params.classId },
+    {
+      $set: {
+        status: req.body.status,
+      },
+    },
+    {
+      new: true,
+    }
+  )
+    .then((statusUpdate) => {
+      res.status(httpCodes.statusCodes.successStatusCode).json({
+        status: true,
+        result: statusUpdate,
       });
     })
     .catch((error) => {
