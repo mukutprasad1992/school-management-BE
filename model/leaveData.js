@@ -6,6 +6,11 @@ leaveSchema = mongoose.Schema(
       type: String,
       enum: ["SICK", "EMERGENCY", "MEDICAL", "NORMAL", "PLANNED"],
     },
+    status: {
+      type: String,
+      enum: ["APPROVED", "PENDING", "REJECTED"],
+      default: "PENDING",
+    },
     startDate: { type: String, required: true },
     endDate: { type: String, required: true },
     reason: { type: String, required: true },

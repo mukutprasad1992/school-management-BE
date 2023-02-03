@@ -39,6 +39,8 @@ exports.createLeave = async (req, res, next) => {
 exports.getLeaves = async (req, res, next) => {
   await Leave.find()
     .populate("tag")
+    .populate("createdBy")
+    .populate("updatedBy")
     .then((leave) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,
@@ -55,6 +57,8 @@ exports.getLeaves = async (req, res, next) => {
 
 exports.getLeaveById = async (req, res, next) => {
   await Leave.findById(req.params.leaveId)
+    .populate("createdBy")
+    .populate("updatedBy")
     .then((getLeave) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,
@@ -71,7 +75,7 @@ exports.getLeaveById = async (req, res, next) => {
 
 exports.updateLeaveById = async (req, res, next) => {
   await Leave.findOneAndUpdate(
-    ({ __id: req.params.leaveId },
+    { _id: req.params.leaveId },
     {
       $set: {
         leaveType: req.body.leaveType,
@@ -80,7 +84,7 @@ exports.updateLeaveById = async (req, res, next) => {
         startDate: req.body.startDate,
         startDate: req.body.endDate,
       },
-    })
+    }
   )
     .then((leaveUpdate) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
@@ -102,6 +106,32 @@ exports.deleteLeave = async (req, res, next) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,
         result: leaveeDeleted,
+      });
+    })
+    .catch((error) => {
+      res.status(httpCodes.statusCodes.internalServerErrorCode).json({
+        status: false,
+        result: error,
+      });
+    });
+};
+
+exports.updateStatusById = async (req, res, next) => {
+  await Leave.findOneAndUpdate(
+    { _id: req.params.leaveId },
+    {
+      $set: {
+        status: req.body.status,
+      },
+    },
+    {
+      new: true,
+    }
+  )
+    .then((statusUpdate) => {
+      res.status(httpCodes.statusCodes.successStatusCode).json({
+        status: true,
+        result: statusUpdate,
       });
     })
     .catch((error) => {

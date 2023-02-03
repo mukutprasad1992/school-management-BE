@@ -77,4 +77,16 @@ router.delete(
   leaveController.deleteLeave
 );
 
+/**
+ * @author Aman
+ * @description updating leaves
+ * @date 10-01-2023
+ */
+router.put(
+  "/status/:leaveId",
+  middleware.authMiddleware,
+  body("status").isLength({ min: 1 }).withMessage("Status must not be empty"),
+  leaveController.updateStatusById
+);
+
 module.exports = router;
