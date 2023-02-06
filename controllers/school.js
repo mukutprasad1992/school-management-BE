@@ -49,6 +49,7 @@ exports.createSchool = async (req, res, next) => {
       });
   }
 };
+
 exports.getSchools = async (req, res, next) => {
   await School.find()
     .populate("createdBy")

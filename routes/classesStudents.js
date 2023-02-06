@@ -55,4 +55,13 @@ router.delete(
   classStudentController.deleteClassesStudentsById
 );
 
+/**
+ * @author Aman
+ * @description Getting Students by Class id
+ * @date 06-01-2023
+ */
+router.get(
+  "/getAllClassStudents/:classId",
+  classStudentController.getStudentsByClassId
+);
 module.exports = router;

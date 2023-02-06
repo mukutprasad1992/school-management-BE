@@ -128,3 +128,21 @@ exports.deleteClassesStudentsById = async (req, res, next) => {
       });
     });
 };
+
+exports.getStudentsByClassId = async (req, res, next) => {
+  ClassStudent.find({ class: req.params.classId })
+    .populate("student")
+    .populate("createdBy")
+    .then((getStudent) => {
+      res.status(httpCodes.statusCodes.successStatusCode).json({
+        status: true,
+        result: getStudent,
+      });
+    })
+    .catch((error) => {
+      res.status(httpCodes.statusCodes.internalServerErrorCode).json({
+        status: false,
+        result: error,
+      });
+    });
+};
