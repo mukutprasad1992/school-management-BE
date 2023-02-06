@@ -4,51 +4,6 @@ const httpCodes = require("../constant/status");
 const messages = require("../constant/messages");
 const mongoose = require("mongoose");
 
-// exports.createSchool = async (req, res, next) => {
-//   // Validate request {params | query | body}
-//   const errors = validationResult(req);
-//   if (!errors.isEmpty()) {
-//     return res
-//       .status(httpCodes.statusCodes.badRequest)
-//       .json({ status: false, result: errors.array() });
-//   }
-//   // End validation
-//   const getSchoolOnUserId = await School.find({ createdBy: req.user._doc._id });
-//   if (getSchoolOnUserId && getSchoolOnUserId.length) {
-//     res.status(httpCodes.statusCodes.badRequest).json({
-//       status: false,
-//       result: messages.errorMessages.schoolAlreadyCreatd,
-//     });
-//   }
-//   var school = new School({
-//     name: req.body.name,
-//     email: req.body.email,
-//     phoneNumber: req.body.phoneNumber,
-//     country: req.body.country,
-//     state: req.body.state,
-//     city: req.body.city,
-//     address: req.body.address,
-//     pinCode: req.body.pinCode,
-//     schoolLogo: "",
-//     createdBy: req.user._doc._id,
-//     updatedBy: req.user._doc._id,
-//   });
-//   return await school
-//     .save()
-//     .then((createSchool) => {
-//       res.status(httpCodes.statusCodes.successStatusCode).json({
-//         status: true,
-//         result: createSchool,
-//       });
-//     })
-//     .catch((error) => {
-//       res.status(httpCodes.statusCodes.internalServerErrorCode).json({
-//         status: false,
-//         result: error,
-//       });
-//     });
-// };
-
 exports.createSchool = async (req, res, next) => {
   // Validate request {params | query | body}
   const errors = validationResult(req);
@@ -115,6 +70,7 @@ exports.getSchools = async (req, res, next) => {
 exports.getSchoolById = async (req, res, next) => {
   await School.findById(req.params.schoolId)
     .populate("city")
+    .populate("createdBy")
     .populate("state")
     .populate("country")
     .populate("createdBy")
