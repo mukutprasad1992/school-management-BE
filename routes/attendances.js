@@ -15,10 +15,10 @@ router.post(
   body("class").isLength({ min: 1 }).withMessage("Class must not be empty"),
   body("dateOfAttendance")
     .isLength({ min: 1 })
-    .withMessage("DateOfAttendance must not be empty"),
+    .withMessage("Date Of attendance must not be empty"),
   body("students")
     .isLength({ min: 1 })
-    .withMessage("Students must not be empty"),
+    .withMessage("students must not be empty"),
   attendanceController.createAttendance
 );
 

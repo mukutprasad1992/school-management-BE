@@ -21,10 +21,10 @@ exports.createAttendance = async (req, res, next) => {
   });
   return await attendance
     .save()
-    .then((attendance) => {
+    .then((createAttendance) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,
-        result: attendance,
+        result: createAttendance,
       });
     })
     .catch((error) => {
