@@ -49,7 +49,7 @@ exports.getUserById = async (req, res, next) => {
 };
 
 exports.deleteUserById = async (req, res, next) => {
-  await User.deleteOne({ __id: req.user._doc._id })
+  await User.deleteOne({ _id: req.user._doc._id })
     .then((UserDeleted) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,
@@ -66,7 +66,7 @@ exports.deleteUserById = async (req, res, next) => {
 
 exports.updatedUser = async (req, res, next) => {
   await User.findOneAndUpdate(
-    ({ __id: req.user._doc._id },
+    ({ _id: req.user._doc._id },
     {
       $set: {
         firstName: req.body.firstName,
@@ -138,7 +138,7 @@ exports.resetPassword = async (req, res, next) => {
               });
           }
           User.findOneAndUpdate(
-            ({ __id: req.user._doc._id },
+            ({ _id: req.user._doc._id },
             {
               $set: {
                 password: hash,

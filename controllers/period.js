@@ -79,7 +79,7 @@ exports.getPeriodById = async (req, res, next) => {
 
 exports.updatePeriod = async (req, res, next) => {
   await Period.findOneAndUpdate(
-    ({ __id: req.params.periodId },
+    ({ _id: req.params.periodId },
     {
       $set: {
         period: req.body.period,
@@ -104,7 +104,7 @@ exports.updatePeriod = async (req, res, next) => {
 };
 
 exports.deletePeriodById = async (req, res, next) => {
-  await Period.deleteOne({ __id: req.params.periodId })
+  await Period.deleteOne({ _id: req.params.periodId })
     .then((periodDeleted) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,

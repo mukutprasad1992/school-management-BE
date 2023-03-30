@@ -70,7 +70,7 @@ exports.getroleById = async (req, res, next) => {
 };
 
 exports.deleteRoleById = async (req, res, next) => {
-  await Role.deleteOne({ __id: req.params.roleId })
+  await Role.deleteOne({ _id: req.params.roleId })
     .then((roleDeleted) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,
@@ -87,7 +87,7 @@ exports.deleteRoleById = async (req, res, next) => {
 
 exports.updateRole = async (req, res, next) => {
   await Role.findOneAndUpdate(
-    ({ __id: req.params.roleId },
+    ({ _id: req.params.roleId },
     {
       $set: {
         name: req.body.name,

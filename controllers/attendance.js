@@ -77,7 +77,7 @@ exports.getAttendanceById = async (req, res, next) => {
 
 exports.updateAttendanceById = async (req, res, next) => {
   await Attendance.findOneAndUpdate(
-    ({ __id: req.params.attendanceId },
+    ({ _id: req.params.attendanceId },
     {
       $set: {
         class: req.body.class,
@@ -102,7 +102,7 @@ exports.updateAttendanceById = async (req, res, next) => {
 };
 
 exports.deleteAttandance = async (req, res, next) => {
-  await Attendance.deleteOne({ __id: req.params.attendanceId })
+  await Attendance.deleteOne({ _id: req.params.attendanceId })
     .then((attendanceDeleted) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,

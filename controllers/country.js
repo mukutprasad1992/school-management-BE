@@ -65,7 +65,7 @@ exports.getcountryById = (req, res, next) => {
 
 exports.updateCountry = (req, res, next) => {
   Country.findOneAndUpdate(
-    ({ __id: req.params.countryId },
+    ({ _id: req.params.countryId },
     {
       $set: {
         name: req.body.name,
@@ -87,7 +87,7 @@ exports.updateCountry = (req, res, next) => {
 };
 
 exports.deleteCountryById = (req, res, next) => {
-  Country.deleteOne({ __id: req.params.countryId })
+  Country.deleteOne({ _id: req.params.countryId })
     .then((countryDeleted) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,

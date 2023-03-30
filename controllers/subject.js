@@ -73,7 +73,7 @@ exports.getSubjectById = async (req, res, next) => {
 
 exports.updateSubject = async (req, res, next) => {
   await Subject.findOneAndUpdate(
-    ({ __id: req.params.subjectId },
+    ({ _id: req.params.subjectId },
     {
       $set: {
         name: req.body.name,
@@ -95,7 +95,7 @@ exports.updateSubject = async (req, res, next) => {
 };
 
 exports.deleteSubjectById = async (req, res, next) => {
-  await Subject.deleteOne({ __id: req.params.subjectId })
+  await Subject.deleteOne({ _id: req.params.subjectId })
     .then((subjectDeleted) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,

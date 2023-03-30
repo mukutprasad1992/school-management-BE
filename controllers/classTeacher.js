@@ -78,7 +78,7 @@ exports.getClassesTeachersById = async (req, res, next) => {
 
 exports.updateClassTeacherById = async (req, res, next) => {
   await ClassTeacher.findOneAndUpdate(
-    ({ __id: req.params.classTeacherId },
+    ({ _id: req.params.classTeacherId },
     {
       $set: {
         class: req.body.class,
@@ -102,7 +102,7 @@ exports.updateClassTeacherById = async (req, res, next) => {
 };
 
 exports.deleteClassesTeachersById = async (req, res, next) => {
-  await ClassTeacher.deleteOne({ __id: req.params.classTeacherId })
+  await ClassTeacher.deleteOne({ _id: req.params.classTeacherId })
     .then((classTeacherDeleted) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,

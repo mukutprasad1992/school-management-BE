@@ -115,7 +115,7 @@ exports.updateSchool = async (req, res, next) => {
 };
 
 exports.deleteSchoolById = async (req, res, next) => {
-  await School.deleteOne({ __id: req.params.schoolId })
+  await School.deleteOne({ _id: req.params.schoolId })
     .then((schoolDeleted) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,
@@ -132,7 +132,7 @@ exports.deleteSchoolById = async (req, res, next) => {
 
 exports.schoolActivation = async (req, res, next) => {
   await School.findOneAndUpdate(
-    { __id: req.params.schoolId },
+    { _id: req.params.schoolId },
     {
       $set: {
         status: "ACTIVATED",

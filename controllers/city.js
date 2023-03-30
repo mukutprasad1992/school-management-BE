@@ -71,7 +71,7 @@ exports.getCityById = async (req, res, next) => {
 
 exports.updateCity = async (req, res, next) => {
   await City.findOneAndUpdate(
-    ({ __id: req.params.cityId },
+    ({ _id: req.params.cityId },
     {
       $set: {
         name: req.body.name,
@@ -95,7 +95,7 @@ exports.updateCity = async (req, res, next) => {
 };
 
 exports.deleteCityById = async (req, res, next) => {
-  await City.deleteOne({ __id: req.params.cityId })
+  await City.deleteOne({ _id: req.params.cityId })
     .then((cityDeleted) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,

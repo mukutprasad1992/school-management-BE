@@ -67,7 +67,7 @@ exports.getstateById = async (req, res, next) => {
 
 exports.updateState = async (req, res, next) => {
   await State.findOneAndUpdate(
-    ({ __id: req.params.stateId },
+    ({ _id: req.params.stateId },
     {
       $set: {
         name: req.body.name,
@@ -89,7 +89,7 @@ exports.updateState = async (req, res, next) => {
 };
 
 exports.deleteStateById = async (req, res, next) => {
-  await State.deleteOne({ __id: req.params.stateId })
+  await State.deleteOne({ _id: req.params.stateId })
     .then((stateDeleted) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,

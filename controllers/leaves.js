@@ -101,7 +101,7 @@ exports.updateLeaveById = async (req, res, next) => {
 };
 
 exports.deleteLeave = async (req, res, next) => {
-  await Leave.deleteOne({ __id: req.params.leaveId })
+  await Leave.deleteOne({ _id: req.params.leaveId })
     .then((leaveeDeleted) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,
