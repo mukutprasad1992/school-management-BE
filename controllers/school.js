@@ -154,7 +154,10 @@ exports.schoolActivation = async (req, res, next) => {
 };
 
 exports.schoolLogoUpload = async (req, res, next) => {
-  School.findOneAndUpdate(
+  // const contentType = `image/${req.file.split('.').pop()}`;
+  const contentType = req.file.mimetype;
+  console.info("req.file", req.file)
+  await School.findOneAndUpdate(
     { _id: req.body.schoolId },
     {
       $set: {

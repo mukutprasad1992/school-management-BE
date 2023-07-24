@@ -102,6 +102,7 @@ exports.updateClassTeacherById = async (req, res, next) => {
 };
 
 exports.deleteClassesTeachersById = async (req, res, next) => {
+  console.info("req.params.classTeacherId", req.params.classTeacherId)
   await ClassTeacher.deleteOne({ _id: req.params.classTeacherId })
     .then((classTeacherDeleted) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({

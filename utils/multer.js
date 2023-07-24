@@ -1,6 +1,7 @@
 const AWS = require("aws-sdk");
 const multer = require("multer");
 const multerS3 = require("multer-s3");
+const path = require("path")
 
 const s3 = new AWS.S3({
   accessKeyId: `${process.env.AWS_ACCESS_KEY_ID}`,
@@ -16,7 +17,7 @@ exports.upload = multer({
       cb(null, { fieldName: file.fieldname });
     },
     key: function (req, file, cb) {
-      cb(null, `image_${Date.now().toString()}`);
+      cb(null, `image_${Date.now().toString()}.${path.extname(file.originalname)}`);
     },
   }),
 });
