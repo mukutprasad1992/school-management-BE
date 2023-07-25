@@ -48,8 +48,8 @@ exports.getUserById = async (req, res, next) => {
     });
 };
 
-exports.deleteUserById = async (req, res, next) => {
-  await User.deleteOne({ _id: req.user._doc._id })
+exports.deleteUserBySpecificId = async (req, res, next) => {
+  await User.deleteOne({ _id: req.params.userId })
     .then((UserDeleted) => {
       res.status(httpCodes.statusCodes.successStatusCode).json({
         status: true,

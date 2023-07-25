@@ -23,11 +23,11 @@ router.post("/login", loginController.loginUser);
 router.put("/", middleware.authMiddleware, userController.updatedUser);
 
 /**
- * @author Aman
+ * @author Mukut
  * @description Deleting data by id
  * @date 09-09-2022
  */
-router.delete("/", middleware.authMiddleware, userController.deleteUserById);
+router.delete("/:userId", middleware.authMiddleware, userController.deleteUserBySpecificId);
 
 /**
  * @author Aman
