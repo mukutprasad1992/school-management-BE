@@ -4,48 +4,119 @@ const httpCodes = require("../constant/status");
 const messages = require("../constant/messages");
 var User = require("../model/userData");
 
+// exports.createClassStudent = async (req, res, next) => {
+//   console.info("getStudent1",req.body.student,"\nclass:",req.body.class)
+//   const getStudent = await ClassStudent.findOne({
+//     student: req.body.student,
+//     class: req.body.class,
+//   });
+//   console.log("getStudent : ",getStudent)
+
+//   if (getStudent) {
+//     res.status(httpCodes.statusCodes.badRequest).json({
+//       status: false,
+//       result: messages.errorMessages.studentAlreadyAssociate,
+//     });
+//   } else {
+//     // Validate request {params | query | body}
+//     const errors = validationResult(req);
+//     if (!errors.isEmpty()) {
+//       return res
+//         .status(httpCodes.statusCodes.conflictRequest)
+//         .json({ status: false, result: errors.array() });
+//     }
+//     // End validation
+//     var classesStudents = new ClassStudent({
+//       class: req.body.class,
+//       student: req.body.student,
+//       rollNo: req.body.rollNo,
+//       createdBy: req.user._doc._id,
+//       updatedBy: req.user._doc._id,
+//     });
+//     return await classesStudents
+//       .save()
+//       .then((createClassStudent) => {
+//         res.status(httpCodes.statusCodes.successStatusCode).json({
+//           status: true,
+//           result: createClassStudent,
+//         });
+//       })
+//       .catch((error) => {
+//         res.status(httpCodes.statusCodes.internalServerErrorCode).json({
+//           status: false,
+//           result: error,
+//         });
+//       });
+//   }
+// };
+
+
+// exports.createClassStudent = async (req, res, next) => {
+//   // Validate request {params | query | body}
+//     const errors = validationResult(req);
+//     if (!errors.isEmpty()) {
+//       return res
+//         .status(httpCodes.statusCodes.conflictRequest)
+//         .json({ status: false, result: errors.array() });
+//     }
+//     // End validation
+//     var classesStudents = new ClassStudent({
+//       class: req.body.class,
+//       student: req.body.student,
+//       rollNo: req.body.rollNo,
+//       createdBy: req.user._doc._id,
+//       updatedBy: req.user._doc._id,
+//     });
+//     return await classesStudents
+//       .save()
+//       .then((createClassStudent) => {
+//         res.status(httpCodes.statusCodes.successStatusCode).json({
+//           status: true,
+//           result: createClassStudent,
+//         });
+//       })
+//       .catch((error) => {
+//        res.status(httpCodes.statusCodes.internalServerErrorCode).json({
+//           status: false,
+//           result: error,
+//         });
+//       });
+// };
+
 exports.createClassStudent = async (req, res, next) => {
-  const getStudent = await User.findOne({
-    student: req.body.student,
-    class: req.body.class,
-  });
-  if (getStudent) {
-    res.status(httpCodes.statusCodes.badRequest).json({
-      status: false,
-      result: messages.errorMessages.studentAlreadyAssociate,
-    });
-  } else {
-    // Validate request {params | query | body}
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res
-        .status(httpCodes.statusCodes.conflictRequest)
-        .json({ status: false, result: errors.array() });
-    }
-    // End validation
-    var classesStudents = new ClassStudent({
-      class: req.body.class,
-      student: req.body.student,
-      rollNo: req.body.rollNo,
-      createdBy: req.user._doc._id,
-      updatedBy: req.user._doc._id,
-    });
-    return await classesStudents
-      .save()
-      .then((createClassStudent) => {
-        res.status(httpCodes.statusCodes.successStatusCode).json({
-          status: true,
-          result: createClassStudent,
-        });
-      })
-      .catch((error) => {
-        res.status(httpCodes.statusCodes.internalServerErrorCode).json({
-          status: false,
-          result: error,
-        });
-      });
+  // Validate request {params | query | body}
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res
+      .status(httpCodes.statusCodes.badRequest)
+      .json({ status: false, result: errors.array() });
   }
+  // End validation
+  var classesClassStudent = new ClassStudent({
+    class: req.body.class,
+    student: req.body.student,
+    rollNo: req.body.rollNo,
+    createdBy: req.user._doc._id,
+    updatedBy: req.user._doc._id,
+  });
+  return await classesClassStudent
+    .save()
+    .then((classesClassStudent) => {
+      res.status(httpCodes.statusCodes.successStatusCode).json({
+        status: true,
+        result: classesClassStudent,
+      });
+    })
+    .catch((error) => {
+      res.status(httpCodes.statusCodes.internalServerErrorCode).json({
+        status: false,
+        result: error,
+      });
+    });
 };
+
+
+
 
 exports.getClassesStudents = async (req, res, next) => {
   await ClassStudent.find()
