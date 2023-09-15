@@ -116,3 +116,25 @@ exports.deleteAttandance = async (req, res, next) => {
       });
     });
 };
+
+exports.getAttendanceByClassAndDate = async (req, res, next) => {
+  console.log("req.param",req.params.classId, req.params.date)
+ const data =  await Attendance.find({class: req.params.classId, dateOfAttendance: req.params.date})
+    .populate("class")
+    .populate("students.student")
+    .populate("createdBy")
+    .populate("updatedBy")
+    .then((AttendanceByClassAndDate) => {
+      res.status(httpCodes.statusCodes.successStatusCode).json({
+        status: true,
+        result: AttendanceByClassAndDate
+      });
+      console.log("AttendanceByClassAndDate",AttendanceByClassAndDate)
+    })
+    .catch((error) => {
+      res.status(httpCodes.statusCodes.internalServerErrorCode).json({
+        status: false,
+        result: error,
+      });
+    });
+};

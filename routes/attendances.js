@@ -40,6 +40,12 @@ router.get(
   attendanceController.getAttendanceById
 );
 
+router.get(
+  "/attendanceByClassAndDate/:classId/:date",
+  middleware.authMiddleware,
+  attendanceController.getAttendanceByClassAndDate
+);
+
 /**
  * @author Aman
  * @description Updating attendance by id
